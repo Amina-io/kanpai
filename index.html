@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kanpai — your dinner has a sponsor</title>
+<meta name="description" content="Kanpai is a platform for community stewards — book clubs, salons, game nights, hackathons, meetups — to find sponsors." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://kanpai.events/" />
+<meta property="og:title" content="Kanpai — your dinner has a sponsor" />
+<meta property="og:description" content="Book clubs, salons, hackathons, meetups. Get your event sponsored by a startup that wants to be in the room." />
+<meta property="og:image" content="https://kanpai.events/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Kanpai — your dinner has a sponsor" />
+<meta name="twitter:description" content="Book clubs, salons, hackathons, meetups. Get your event sponsored by a startup that wants to be in the room." />
+<meta name="twitter:image" content="https://kanpai.events/og.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background-color: #F4F1EA; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E"); -webkit-font-smoothing: antialiased; }
+  a { color: #1E3A2B; text-decoration-color: rgba(30,58,43,0.35); text-underline-offset: 3px; }
+  a:hover { color: #0F1F16; text-decoration-color: rgba(30,58,43,0.9); }
+  ::placeholder { color: rgba(20,24,15,0.38); }
+  @keyframes gl-word-in { from { opacity: 0; transform: translateY(0.18em); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes gl-iris { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  input:focus, select:focus { outline: none; border-color: #14180F !important; }
+</style>
+</helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#C3D7E2"></rect><text x="50" y="50" font-family="Georgia, serif" font-size="34" fill="#14180F" text-anchor="middle" dominant-baseline="central">乾</text></svg></template>
+<div style="min-height: 100vh; color: #14180F; font-family: 'Zen Kaku Gothic New', sans-serif; display: flex; flex-direction: column;">
+
+  <header style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; padding: 20px clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(20,24,15,0.12);">
+    <div style="font-family: 'Shippori Mincho', serif; font-size: 21px; letter-spacing: -0.01em; font-weight: 500;">Kanpai</div>
+    <div style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6A5C;">San Francisco &nbsp;·&nbsp; more cities soon</div>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-wrap: wrap; flex-direction: row-reverse; align-items: stretch; gap: 0;">
+
+    <aside style="flex: 1 1 400px; background: #C3D7E2; color: #14180F; padding: clamp(44px, 7vw, 88px) clamp(20px, 5vw, 40px); box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; gap: 26px; align-self: stretch;">
+
+      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 26px; max-width: 460px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <h2 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: 30px; line-height: 1.15; letter-spacing: -0.01em;">Join the first cohort</h2>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: rgba(20,24,15,0.78);">Taking the first SF cohort now. Two questions and you're on the list.</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 5px; border: 1px solid rgba(20,24,15,0.22); border-radius: 6px;">
+            <button type="button" onClick="{{ pickHost }}" style="{{ hostTabStyle }}">I host events</button>
+            <button type="button" onClick="{{ pickStartup }}" style="{{ startupTabStyle }}">I sponsor events</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <label style="display: flex; flex-direction: column; gap: 7px;">
+              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Email</span>
+              <input type="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
+            </label>
+
+            <label style="display: flex; flex-direction: column; gap: 7px;">
+              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">City</span>
+              <select value="{{ city }}" onChange="{{ setCity }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
+                <option value="sf" style="color: #14180F;">San Francisco</option>
+                <option value="nyc" style="color: #14180F;">New York</option>
+                <option value="la" style="color: #14180F;">Los Angeles</option>
+                <option value="other" style="color: #14180F;">Somewhere else</option>
+              </select>
+            </label>
+
+            <sc-if value="{{ isHost }}" hint-placeholder-val="{{ true }}">
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">What do you host?</span>
+                <select value="{{ eventType }}" onChange="{{ setEventType }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
+                  <option value="salon" style="color: #14180F;">Salon or supper club</option>
+                  <option value="party" style="color: #14180F;">Party</option>
+                  <option value="retreat" style="color: #14180F;">Retreat or offsite</option>
+                  <option value="hacknight" style="color: #14180F;">Hack night or demo night</option>
+                  <option value="conference" style="color: #14180F;">Conference or summit</option>
+                  <option value="other" style="color: #14180F;">Something else</option>
+                </select>
+              </label>
+            </sc-if>
+
+            <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">What can you offer?</span>
+                <select value="{{ offer }}" onChange="{{ setOffer }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
+                  <option value="cash" style="color: #14180F;">Money</option>
+                  <option value="space" style="color: #14180F;">Our space</option>
+                  <option value="product" style="color: #14180F;">Product or credits</option>
+                  <option value="food" style="color: #14180F;">Food &amp; drink</option>
+                  <option value="unsure" style="color: #14180F;">Not sure yet</option>
+                </select>
+              </label>
+            </sc-if>
+
+            <sc-if value="{{ showBudget }}" hint-placeholder-val="{{ false }}">
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Annual marketing budget</span>
+                <select value="{{ budget }}" onChange="{{ setBudget }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
+                  <option value="under5" style="color: #14180F;">Under $5k</option>
+                  <option value="5to25" style="color: #14180F;">$5k – $25k</option>
+                  <option value="25to100" style="color: #14180F;">$25k – $100k</option>
+                  <option value="over100" style="color: #14180F;">$100k+</option>
+                </select>
+              </label>
+            </sc-if>
+
+            <button type="button" onClick="{{ submit }}" style="margin-top: 4px; background: #14180F; color: #F4F1EA; border: none; border-radius: 5px; padding: 15px 20px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 120ms ease, background 120ms ease;" style-hover="background: #2A3020; transform: translateY(-1px);" style-active="transform: translateY(0);">{{ submitLabel }}</button>
+
+            <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0; font-size: 13px; line-height: 1.55; color: #8C2F1D;">{{ error }}</p>
+            </sc-if>
+
+            <p style="margin: 0; font-size: 12px; line-height: 1.6; color: rgba(20,24,15,0.68);">No spam. We'll email once when the beta opens.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 420px; padding: 40px 0;">
+          <div style="font-family: 'Shippori Mincho', serif; font-size: 34px; line-height: 1.1;">You're on the list.</div>
+          <p style="margin: 0; font-size: 15px; line-height: 1.65; color: rgba(20,24,15,0.68);">{{ confirmLine }}</p>
+          <p style="margin: 0; font-size: 15px; line-height: 1.65; color: rgba(20,24,15,0.68);">Reply to that email with what's next on your calendar and we'll get it listed first.</p>
+        </div>
+      </sc-if>
+
+      <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid rgba(20,24,15,0.16); display: flex; flex-direction: column; gap: 6px;">
+        <div style="font-size: 13px; color: rgba(20,24,15,0.68);">Free to list. We take 10% when money changes hands, nothing when it doesn't.</div>
+        <div style="font-size: 13px; color: rgba(20,24,15,0.68);">Questions? <a href="mailto:hi@kanpai.events" style="color: rgba(20,24,15,0.85);">hi@kanpai.events</a></div>
+      </div>
+    </aside>
+
+    <section style="padding: clamp(44px, 7vw, 88px) clamp(20px, 5vw, 56px) clamp(44px, 7vw, 88px) clamp(20px, 5vw, 40px); display: flex; flex-direction: column; gap: 28px; flex: 1 1 440px; box-sizing: border-box; max-width: 780px;">
+      <div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #1E3A2B; border: 1px solid rgba(30,58,43,0.3); border-radius: 999px; padding: 6px 12px;">Taking the first SF cohort now</div>
+
+      <sc-if value="{{ isHost }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 28px;">
+          <h1 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: clamp(36px, 6.4vw, 62px); line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; min-height: 2.1em;">Your {{ rotatingWord }} has a sponsor.</h1>
+          <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: clamp(17px, 2.1vw, 20px); line-height: 1.55; color: #3D4238; max-width: 30em; text-wrap: pretty;">Kanpai is a platform for community stewards of book clubs, salons, game nights, hackathons and meetups of all sorts to find sponsors. Focus on building your community.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 28px;">
+          <h1 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: clamp(36px, 6.4vw, 62px); line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; min-height: 2.1em;">Buy the {{ rotatingWordComma }} not the banner.</h1>
+          <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: clamp(17px, 2.1vw, 20px); line-height: 1.55; color: #3D4238; max-width: 30em; text-wrap: pretty;">Kanpai lets founders and marketing teams reach niche early-adopter communities by sponsoring their events. Rooms of forty people who already trust the host.</p>
+        </div>
+      </sc-if>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px;">
+        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Book clubs</div>
+        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Salons</div>
+        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Hackathons</div>
+        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Game nights</div>
+        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Meetups</div>
+      </div>
+
+      <div style="border-left: 2px solid rgba(30,58,43,0.35); padding: 2px 0 2px 16px;">
+        <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: 16px; line-height: 1.6; color: #3D4238; max-width: 34em; text-wrap: pretty;">For example: a 40-person AI dinner in the Mission, sponsored at $2,000. The sponsor gave a three-minute demo and took a seat at the table.</p>
+      </div>
+
+      <div style="height: 1px; background: rgba(20,24,15,0.12); margin: 20px 0 4px;"></div>
+
+      <div style="display: flex; flex-direction: column; gap: 22px;">
+        <h2 style="margin: 0; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #6B6A5C; font-weight: 500;">How it works</h2>
+
+        <sc-if value="{{ isHost }}" hint-placeholder-val="{{ true }}">
+          <ol style="margin: 0; padding: 0; list-style: none; display: grid; gap: 18px;">
+            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
+              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">01</span>
+              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Describe the room.</strong> Date, headcount, and who actually shows up.</span>
+            </li>
+            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
+              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">02</span>
+              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Sponsors find you.</strong> They browse the rooms and reach out — money, a venue, food, or all three.</span>
+            </li>
+            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
+              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">03</span>
+              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Settled before the event.</strong> Cash through Stripe, or a venue on the calendar.</span>
+            </li>
+          </ol>
+        </sc-if>
+
+        <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
+          <ol style="margin: 0; padding: 0; list-style: none; display: grid; gap: 18px;">
+            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
+              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">01</span>
+              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Browse the rooms.</strong> Upcoming events with the guest mix spelled out, priced.</span>
+            </li>
+            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
+              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">02</span>
+              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Pick your fit.</strong> Agree what you get — a mention, a demo, a seat at the table.</span>
+            </li>
+            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
+              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">03</span>
+              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Back it and show up.</strong> One click, Stripe handles the rest.</span>
+            </li>
+          </ol>
+        </sc-if>
+      </div>
+    </section>
+  </main>
+
+  <footer style="display: flex; align-items: center; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; padding: 20px clamp(20px, 5vw, 40px); border-top: 1px solid rgba(20,24,15,0.12); font-size: 12px; color: #6B6A5C;">
+    <div>Kanpai — San Francisco</div>
+    <div>Made by <a href="https://amina-io.com" target="_blank" rel="noopener" style="color: #3D4238;">amina-io.com</a></div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;host&quot;,&quot;startup&quot;],&quot;default&quot;:&quot;host&quot;,&quot;tsType&quot;:&quot;'host' | 'startup'&quot;,&quot;section&quot;:&quot;Content&quot;}}">
+class Component extends DCLogic {
+  state = { role: null, email: "", city: "sf", eventType: "salon", budget: "5to25", submitted: false, wordIdx: 0, sending: false, error: "", offer: "cash" };
+
+  words = ["dinner", "salon", "meetup", "retreat", "mixer"];
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.setState(s => ({ wordIdx: (s.wordIdx + 1) % this.words.length }));
+    }, 2600);
+  }
+
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  get role() { return this.state.role || this.props.defaultRole || "host"; }
+
+  tab(active) {
+    return {
+      background: active ? "#14180F" : "transparent",
+      color: active ? "#F4F1EA" : "rgba(20,24,15,0.72)",
+      border: "none",
+      borderRadius: "4px",
+      padding: "11px 12px",
+      fontFamily: "'Zen Kaku Gothic New', sans-serif",
+      fontSize: "14px",
+      fontWeight: active ? 600 : 500,
+      cursor: "pointer",
+      transition: "background 120ms ease, color 120ms ease"
+    };
+  }
+
+  renderVals() {
+    const role = this.role;
+    const host = role === "host";
+    const w = this.words[this.state.wordIdx];
+    const irisWord = (text) => React.createElement("span", {
+        key: w,
+        style: {
+          display: "inline-block",
+          fontStyle: "italic",
+          paddingRight: "0.08em",
+          color: "#1E3A2B",
+          backgroundImage: "linear-gradient(100deg, #1E3A2B 0%, #2C5B4C 18%, #3F5A72 34%, #5B4A6B 50%, #3F5A72 66%, #2C5B4C 82%, #1E3A2B 100%)",
+          backgroundSize: "200% 100%",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          animation: "gl-word-in 420ms cubic-bezier(0.2,0.7,0.2,1) both, gl-iris 11s linear infinite"
+        }
+      }, text);
+    return {
+      rotatingWord: irisWord(w),
+      rotatingWordComma: irisWord(w + ","),
+      isHost: host,
+      isStartup: !host,
+      submitted: this.state.submitted,
+      notSubmitted: !this.state.submitted,
+      email: this.state.email,
+      city: this.state.city,
+      eventType: this.state.eventType,
+      budget: this.state.budget,
+      offer: this.state.offer,
+      showBudget: !host && this.state.offer === "cash",
+      setOffer: (e) => this.setState({ offer: e.target.value }),
+      hostTabStyle: this.tab(host),
+      startupTabStyle: this.tab(!host),
+      confirmLine: host
+        ? "We'll email you the moment hosts can list their rooms, and nudge you if we spot a sponsor who fits."
+        : "We'll send you the first batch of SF rooms as soon as the beta opens.",
+      pickHost: () => this.setState({ role: "host" }),
+      pickStartup: () => this.setState({ role: "startup" }),
+      setEmail: (e) => this.setState({ email: e.target.value }),
+      setCity: (e) => this.setState({ city: e.target.value }),
+      setEventType: (e) => this.setState({ eventType: e.target.value }),
+      setBudget: (e) => this.setState({ budget: e.target.value }),
+      submitLabel: this.state.sending ? "Sending…" : "Join the list",
+      error: this.state.error,
+      submit: async () => {
+        if (this.state.sending) return;
+        if (!/.+@.+\..+/.test(this.state.email)) {
+          this.setState({ error: "That email doesn't look right." });
+          return;
+        }
+        this.setState({ sending: true, error: "" });
+        const cities = { sf: "San Francisco", nyc: "New York", la: "Los Angeles", other: "Somewhere else" };
+        const events = { salon: "Salon or supper club", party: "Party", retreat: "Retreat or offsite", hacknight: "Hack night or demo night", conference: "Conference or summit", other: "Something else" };
+        const budgets = { under5: "Under $5k", "5to25": "$5k – $25k", "25to100": "$25k – $100k", over100: "$100k+" };
+        const payload = {
+          email: this.state.email,
+          role: host ? "Host" : "Startup",
+          city: cities[this.state.city] || this.state.city,
+          _subject: "Kanpai waitlist — " + (host ? "host" : "startup")
+        };
+        const offers = { cash: "Money", space: "Our space", product: "Product or credits", food: "Food & drink", unsure: "Not sure yet" };
+        if (host) { payload.event_type = events[this.state.eventType]; }
+        else {
+          payload.offering = offers[this.state.offer];
+          if (this.state.offer === "cash") payload.marketing_budget = budgets[this.state.budget];
+        }
+        try {
+          const res = await fetch("https://formspree.io/f/xppzqvgv", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error("bad status");
+          this.setState({ sending: false, submitted: true });
+        } catch (e) {
+          this.setState({ sending: false, error: "Something went wrong. Try again, or email hi@kanpai.events." });
+        }
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
