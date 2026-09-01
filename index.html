@@ -88,8 +88,8 @@
 
               <label style="display: flex; flex-direction: column; gap: 7px;">
                 <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Where you've hosted before</span>
-                <input type="url" value="{{ hostLink }}" onChange="{{ setHostLink }}" placeholder="Partiful, Luma or Eventbrite link" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
-                <span style="font-size: 12px; line-height: 1.55; color: rgba(20,24,15,0.62);">Your profile or a past event page — this is what we review.</span>
+                <input type="text" value="{{ hostLink }}" onChange="{{ setHostLink }}" placeholder="A link, or tell us where" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
+                <span style="font-size: 12px; line-height: 1.55; color: rgba(20,24,15,0.62);">A past event page, your profile, or the Discord or group chat you run. This is what we review.</span>
               </label>
             </sc-if>
 
@@ -102,18 +102,6 @@
                   <option value="product" style="color: #14180F;">Product or credits</option>
                   <option value="food" style="color: #14180F;">Food &amp; drink</option>
                   <option value="unsure" style="color: #14180F;">Not sure yet</option>
-                </select>
-              </label>
-            </sc-if>
-
-            <sc-if value="{{ showBudget }}" hint-placeholder-val="{{ false }}">
-              <label style="display: flex; flex-direction: column; gap: 7px;">
-                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Annual marketing budget</span>
-                <select value="{{ budget }}" onChange="{{ setBudget }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
-                  <option value="under5" style="color: #14180F;">Under $5k</option>
-                  <option value="5to25" style="color: #14180F;">$5k – $25k</option>
-                  <option value="25to100" style="color: #14180F;">$25k – $100k</option>
-                  <option value="over100" style="color: #14180F;">$100k+</option>
                 </select>
               </label>
             </sc-if>
@@ -155,7 +143,7 @@
       <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
         <div style="display: flex; flex-direction: column; gap: 28px;">
           <h1 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: clamp(36px, 6.4vw, 62px); line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; min-height: 2.1em;">Back the {{ rotatingWordComma }} not the banner.</h1>
-          <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: clamp(17px, 2.1vw, 20px); line-height: 1.55; color: #3D4238; max-width: 30em; text-wrap: pretty;">Kanpai lets founders and marketing teams reach niche early-adopter communities by sponsoring their events. Rooms of forty people who already trust the host.</p>
+          <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: clamp(17px, 2.1vw, 20px); line-height: 1.55; color: #3D4238; max-width: 30em; text-wrap: pretty;">Kanpai empowers founders, marketing teams and individual patrons to support niche early-adopter communities by sponsoring their events. The people who show up on a Tuesday night are the ones who will care about what you build.</p>
         </div>
       </sc-if>
 
@@ -235,9 +223,9 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;host&quot;,&quot;startup&quot;],&quot;default&quot;:&quot;host&quot;,&quot;tsType&quot;:&quot;'host' | 'startup'&quot;,&quot;section&quot;:&quot;Content&quot;}}">
 class Component extends DCLogic {
-  state = { role: null, email: "", city: "sf", eventType: "salon", budget: "5to25", submitted: false, wordIdx: 0, sending: false, error: "", offer: "cash", hostLink: "" };
+  state = { role: null, email: "", city: "sf", eventType: "salon", submitted: false, wordIdx: 0, sending: false, error: "", offer: "cash", hostLink: "" };
 
-  words = ["dinner", "salon", "meetup", "run club", "mixer"];
+  words = ["dinner", "supper club", "game night", "salon", "run club", "knitting circle", "meetup"];
 
   photos = (() => {
     const files = ["e1.jpg", "e2.jpg", "e3.jpg", "e4.jpg", "e5.jpg"];
@@ -308,9 +296,7 @@ class Component extends DCLogic {
       email: this.state.email,
       city: this.state.city,
       eventType: this.state.eventType,
-      budget: this.state.budget,
       offer: this.state.offer,
-      showBudget: !host && this.state.offer === "cash",
       setOffer: (e) => this.setState({ offer: e.target.value }),
       hostTabStyle: this.tab(host),
       startupTabStyle: this.tab(!host),
@@ -324,7 +310,6 @@ class Component extends DCLogic {
       setEventType: (e) => this.setState({ eventType: e.target.value }),
       hostLink: this.state.hostLink,
       setHostLink: (e) => this.setState({ hostLink: e.target.value }),
-      setBudget: (e) => this.setState({ budget: e.target.value }),
       submitLabel: this.state.sending ? "Sending…" : "Join the list",
       error: this.state.error,
       submit: async () => {
@@ -336,7 +321,6 @@ class Component extends DCLogic {
         this.setState({ sending: true, error: "" });
         const cities = { sf: "San Francisco", nyc: "New York", la: "Los Angeles", other: "Somewhere else" };
         const events = { salon: "Salon or supper club", party: "Party", runclub: "Run club", hacknight: "Hack night or demo night", conference: "Conference or summit", other: "Something else" };
-        const budgets = { under5: "Under $5k", "5to25": "$5k – $25k", "25to100": "$25k – $100k", over100: "$100k+" };
         const payload = {
           email: this.state.email,
           role: host ? "Host" : "Startup",
@@ -350,7 +334,6 @@ class Component extends DCLogic {
         }
         else {
           payload.offering = offers[this.state.offer];
-          if (this.state.offer === "cash") payload.marketing_budget = budgets[this.state.budget];
         }
         try {
           const res = await fetch("https://formspree.io/f/xppzqvgv", {
