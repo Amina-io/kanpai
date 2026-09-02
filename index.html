@@ -59,6 +59,11 @@
 
           <div style="display: flex; flex-direction: column; gap: 16px;">
             <label style="display: flex; flex-direction: column; gap: 7px;">
+              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Name</span>
+              <input type="text" value="{{ name }}" onChange="{{ setName }}" placeholder="Your name" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
+            </label>
+
+            <label style="display: flex; flex-direction: column; gap: 7px;">
               <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Email</span>
               <input type="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
             </label>
@@ -103,6 +108,12 @@
                   <option value="food" style="color: #14180F;">Food &amp; drink</option>
                   <option value="unsure" style="color: #14180F;">Not sure yet</option>
                 </select>
+              </label>
+
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Associated org <span style="text-transform: none; letter-spacing: 0; color: rgba(20,24,15,0.5);">(optional)</span></span>
+                <input type="text" value="{{ org }}" onChange="{{ setOrg }}" placeholder="Company, fund or collective" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
+                <span style="font-size: 12px; line-height: 1.55; color: rgba(20,24,15,0.62);">Leave blank if you're sponsoring as an individual.</span>
               </label>
             </sc-if>
 
@@ -157,7 +168,6 @@
         <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Salons</div>
         <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Hackathons</div>
         <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Game nights</div>
-        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Meetups</div>
       </div>
 
       <div style="display: flex; gap: 14px; align-items: flex-start; background: rgba(195,215,226,0.4); border: 1px solid rgba(30,58,43,0.18); border-radius: 10px; padding: 16px 18px;">
@@ -223,7 +233,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;host&quot;,&quot;startup&quot;],&quot;default&quot;:&quot;host&quot;,&quot;tsType&quot;:&quot;'host' | 'startup'&quot;,&quot;section&quot;:&quot;Content&quot;}}">
 class Component extends DCLogic {
-  state = { role: null, email: "", city: "sf", eventType: "salon", submitted: false, wordIdx: 0, sending: false, error: "", offer: "cash", hostLink: "" };
+  state = { role: null, name: "", org: "", email: "", city: "sf", eventType: "salon", submitted: false, wordIdx: 0, sending: false, error: "", offer: "cash", hostLink: "" };
 
   words = ["dinner", "supper club", "game night", "salon", "run club", "knitting circle", "meetup"];
 
@@ -308,6 +318,10 @@ class Component extends DCLogic {
       setEmail: (e) => this.setState({ email: e.target.value }),
       setCity: (e) => this.setState({ city: e.target.value }),
       setEventType: (e) => this.setState({ eventType: e.target.value }),
+      name: this.state.name,
+      setName: (e) => this.setState({ name: e.target.value }),
+      org: this.state.org,
+      setOrg: (e) => this.setState({ org: e.target.value }),
       hostLink: this.state.hostLink,
       setHostLink: (e) => this.setState({ hostLink: e.target.value }),
       submitLabel: this.state.sending ? "Sending…" : "Join the list",
@@ -322,6 +336,7 @@ class Component extends DCLogic {
         const cities = { sf: "San Francisco", nyc: "New York", la: "Los Angeles", other: "Somewhere else" };
         const events = { salon: "Salon or supper club", party: "Party", runclub: "Run club", hacknight: "Hack night or demo night", conference: "Conference or summit", other: "Something else" };
         const payload = {
+          name: this.state.name || "(not given)",
           email: this.state.email,
           role: host ? "Host" : "Startup",
           city: cities[this.state.city] || this.state.city,
@@ -334,6 +349,7 @@ class Component extends DCLogic {
         }
         else {
           payload.offering = offers[this.state.offer];
+          payload.associated_org = this.state.org || "(individual)";
         }
         try {
           const res = await fetch("https://formspree.io/f/xppzqvgv", {
