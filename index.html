@@ -1,371 +1,450 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kanpai: sponsors for the gatherings that bring people together</title>
+<meta name="description" content="Kanpai is where community hosts list their gatherings and sponsors find the ones worth backing. Supper clubs, salons, run clubs, hack nights. Now in beta in San Francisco.">
+<meta name="theme-color" content="#0d0b10">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kanpai.events/">
+<meta property="og:title" content="Kanpai: good things happen when people get together">
+<meta property="og:description" content="Where community hosts list their gatherings and sponsors find the ones worth backing. Beta, San Francisco first.">
+<meta property="og:image" content="https://kanpai.events/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kanpai: good things happen when people get together">
+<meta name="twitter:description" content="Where community hosts list their gatherings and sponsors find the ones worth backing. Beta, San Francisco first.">
+<meta name="twitter:image" content="https://kanpai.events/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Instrument Serif";src:url(assets/fonts/InstrumentSerif-Regular.woff2) format("woff2");font-display:block}
+:root{--night:#0d0b10;--plum:#251c2e;--lilac:#c9a7ff;--rose:#ff8fc7;--butter:#ffe7a3;--cloud:#f6f2f8;--muted:#cfc7d8;
+--zen:"Zen Old Mincho",serif;--sans:"Inter Tight",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--pad:clamp(20px,6vw,96px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--cloud);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;background-image:url(assets/grain.png),url(assets/dither.png);background-size:256px,64px;opacity:.5;mix-blend-mode:overlay}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--zen);font-weight:400;margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--lilac)}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:var(--cloud);white-space:nowrap;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.chip.butter{background:rgba(255,231,163,.92);border-color:var(--butter);color:var(--night)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--butter);box-shadow:0 0 10px var(--butter);animation:pulse 2.4s ease-in-out infinite}
+.btn{display:inline-flex;justify-content:center;align-items:center;font:600 16px/1 var(--sans);padding:16px 26px;border-radius:999px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .2s,background-color .2s,opacity .2s;min-height:48px}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--cloud);color:var(--night)}
+.btn.ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.26);color:var(--cloud);font-weight:500}
+.btn:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--lilac);outline-offset:3px}
+.sparkle{display:block;width:var(--s,20px);height:var(--s,20px)}
+
+/* nav */
+.nav{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px clamp(16px,3.4vw,48px)}
+.nav .links{display:flex;align-items:center;gap:26px}
+.nav .links a:not(.btn){font-size:15px;text-decoration:none;opacity:.92}
+.nav .links .btn{padding:12px 20px;font-size:15px;min-height:44px}
+.kmark{width:28px;height:auto;display:block}
+.menu-btn{display:none;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:var(--cloud);cursor:pointer;align-items:center;justify-content:center}
+.nav .mobile-mark{display:none}
+
+/* hero */
+.hero{position:relative;min-height:min(100svh,980px);overflow:hidden;isolation:isolate}
+.hero .glow{position:absolute;inset:-20px;z-index:-2;background:url(assets/glow.jpg) center/cover;opacity:.85;animation:drift 16s ease-in-out infinite alternate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(13,11,16,.1),rgba(13,11,16,.35) 45%,var(--night))}
+.scan{position:absolute;left:0;right:0;top:0;height:90px;z-index:5;pointer-events:none;opacity:0;background:repeating-linear-gradient(180deg,rgba(255,255,255,.16) 0 1px,transparent 1px 4px);animation:scan 1.1s cubic-bezier(.6,0,.4,1) 1s forwards}
+.hero-inner{position:relative;max-width:1440px;margin:0 auto;padding:104px clamp(20px,7vw,110px) 120px}
+.wordmark{display:block;width:100%;height:auto;overflow:visible}
+.kdots circle{opacity:0;animation:pop .01s linear var(--d) forwards}
+.anpai{clip-path:inset(0 100% 0 0);animation:wipe 1s steps(5,end) 1.2s forwards}
+.hero-copy{position:relative;z-index:3;max-width:600px;margin:clamp(28px,4vw,48px) auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.hero-copy h1{font-size:clamp(32px,3.2vw,46px)}
+.hero-copy p{font-size:clamp(16px,1.3vw,18px)}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.fine{font-size:14px;color:var(--muted)}
+.cards{position:absolute;inset:0;pointer-events:none}
+.card-wrap{position:absolute;z-index:2;pointer-events:auto}
+.card-wrap.left{left:clamp(24px,8.6vw,124px);top:500px}
+.card-wrap.right{right:clamp(24px,7vw,100px);top:450px}
+.card{position:relative;width:260px;height:330px;border-radius:26px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.12);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.left .card{transform:rotate(-6deg)}.right .card{transform:rotate(5deg)}
+.card:hover{transform:rotate(0) scale(1.04)}
+.frame{position:absolute;inset:0;opacity:0;animation:6.6s steps(1,end) infinite}
+.frame:nth-child(1){animation-name:f0}.frame:nth-child(2){animation-name:f1}.frame:nth-child(3){animation-name:f2}
+.right .frame{animation-delay:-2.2s}
+.frame img{width:100%;height:100%;object-fit:cover}
+.frame .meta{position:absolute;left:0;right:0;bottom:0;padding:60px 18px 18px;background:linear-gradient(180deg,rgba(13,11,16,0),rgba(13,11,16,.88));display:flex;flex-direction:column;gap:8px}
+.frame .t{font-family:var(--zen);font-size:22px}
+.frame .w{font-size:13px;color:var(--muted)}
+.frame .chips{display:flex;gap:6px;flex-wrap:wrap}
+.deco{position:absolute;z-index:3;pointer-events:none;height:auto}
+.deco.cd-d{width:90px;left:-30px;top:-62px;z-index:-1}.deco.cd-m{display:none}
+.deco.book{width:92px;left:400px;top:772px;transform:rotate(-10deg)}
+.tw{position:absolute;z-index:4;animation:tw 4s ease-in-out infinite}
+.rise{opacity:0;animation:rise .8s cubic-bezier(.2,.7,.2,1) var(--rd,2s) forwards}
+
+/* ticker */
+.ticker{overflow:hidden;border-block:1px solid rgba(255,255,255,.12);padding:18px 0;background:rgba(255,255,255,.03)}
+.ticker .track{display:flex;width:max-content;animation:tick 34s linear infinite}
+.ticker span{display:inline-flex;align-items:center;gap:22px;padding-right:22px;font-family:var(--zen);font-size:clamp(18px,1.6vw,22px);white-space:nowrap}
+
+/* sections */
+section{position:relative}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:var(--pad)}
+.mission{padding-block:clamp(64px,9vw,120px)}
+.mission .grid{display:grid;grid-template-columns:7fr 1fr 4fr;gap:24px;align-items:center}
+.mission .text{display:flex;flex-direction:column;gap:22px}
+.mission h2{font-size:clamp(32px,3.7vw,52px)}
+.mission p{font-size:clamp(16px,1.35vw,19px)}
+.mission .photo{grid-column:3;position:relative;height:380px}
+.mission .photo img.main{width:300px;height:360px;object-fit:cover;border-radius:26px;transform:rotate(3deg);box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.mission .photo .glass{position:absolute;left:-70px;top:170px;width:120px}
+.mission .photo .chip{position:absolute;left:200px;top:316px}
+.how{padding-block:40px clamp(64px,9vw,120px)}
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px 40px;flex-wrap:wrap;margin-bottom:44px}
+.head-row h2,.sponsors h2{font-size:clamp(32px,3.2vw,46px)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.steps h3{font-size:26px;margin-bottom:4px}
+.step{display:flex;gap:16px;align-items:flex-start;padding:18px 20px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.step .n{font-family:var(--zen);font-size:30px;line-height:1;min-width:22px}
+.step b{display:block;font-size:17px;font-weight:600;margin-bottom:4px}
+.step p{font-size:15px;line-height:1.5}
+.sponsors{margin:0 clamp(12px,3.4vw,48px);padding:clamp(44px,6vw,88px) clamp(20px,3.4vw,48px);border-radius:clamp(30px,3vw,40px);background:var(--plum);overflow:hidden;isolation:isolate}
+.sponsors::before{content:"";position:absolute;inset:0;z-index:-1;background:url(assets/glow.jpg) center/cover;opacity:.35}
+.sponsors .lead{max-width:780px;display:flex;flex-direction:column;gap:18px;margin-bottom:40px}
+.sponsors .lead p{color:var(--cloud);font-size:clamp(16px,1.35vw,19px)}
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px}
+.why div{display:flex;flex-direction:column;gap:8px;padding:22px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.why b{font-size:17px;font-weight:600}
+.why p{font-size:15px;line-height:1.5}
+.sponsors .cta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.sponsors .phone{position:absolute;right:56px;bottom:40px;width:170px;transform-origin:50% 90%}
+.final{padding:clamp(80px,10vw,140px) var(--pad) clamp(64px,8vw,120px);display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center}
+.final h2{font-size:clamp(40px,4.4vw,64px)}
+.final .cd{width:70px}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;padding:32px clamp(20px,3.4vw,48px) 40px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;color:var(--muted)}
+footer .l{display:flex;align-items:center;gap:12px}
+footer a{text-decoration:none}
+
+/* modal */
+dialog{border:0;padding:0;background:transparent;color:var(--cloud);max-width:min(660px,calc(100vw - 24px));width:100%;max-height:calc(100svh - 24px)}
+dialog::backdrop{background:rgba(8,6,10,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+dialog[open]{animation:modal-in .35s cubic-bezier(.2,.7,.2,1)}
+.sheet{padding:28px clamp(20px,4vw,34px) 30px;border-radius:32px;background:rgba(28,22,34,.62);-webkit-backdrop-filter:blur(28px) saturate(1.4);backdrop-filter:blur(28px) saturate(1.4);border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 100px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.18);display:flex;flex-direction:column;gap:20px;max-height:calc(100svh - 24px);overflow:auto}
+.sheet .top{display:flex;justify-content:space-between;align-items:center}
+.icon-btn{width:44px;height:44px;border-radius:999px;border:0;background:rgba(255,255,255,.08);color:var(--cloud);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sheet h2{font-size:clamp(28px,4vw,38px)}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pick{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:14px 14px 20px;border-radius:22px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);transition:background-color .2s,transform .2s}
+.pick:hover{background:rgba(255,255,255,.11);transform:translateY(-2px)}
+.pick:focus-visible{outline:2px solid var(--lilac);outline-offset:3px}
+.pick img{width:100%;height:120px;object-fit:cover;border-radius:14px}
+.pick .body{padding:0 6px;display:flex;flex-direction:column;gap:6px}
+.pick .ttl{font-family:var(--zen);font-size:24px}
+.pick p{font-size:14px;line-height:1.5}
+.back{all:unset;cursor:pointer;font-size:14px;color:var(--muted);align-self:flex-start}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:var(--muted);min-width:0}
+.fields input,.fields select{font:16px var(--sans);padding:13px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:var(--cloud);width:100%}
+.fields select option{color:#111}
+.fields input::placeholder{color:rgba(246,242,248,.4)}
+.fields input[aria-invalid=true]{border-color:var(--rose)}
+.form-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.err{color:var(--rose);font-size:14px;min-height:1em}
+.done{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px 0;text-align:center}
+[hidden]{display:none!important}
+
+/* motion */
+@keyframes pop{to{opacity:1}}
+@keyframes wipe{to{clip-path:inset(0 0 0 0)}}
+@keyframes scan{0%{transform:translateY(-120px);opacity:0}10%{opacity:1}100%{transform:translateY(960px);opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes f0{0%,33%{opacity:1}33.4%,100%{opacity:0}}
+@keyframes f1{0%,33.3%{opacity:0}33.4%,66.6%{opacity:1}66.7%,100%{opacity:0}}
+@keyframes f2{0%,66.6%{opacity:0}66.7%,100%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes tick{to{transform:translateX(-50%)}}
+@keyframes tw{0%,80%,100%{transform:scale(1)}88%{transform:scale(1.5) rotate(45deg)}}
+@keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(-2deg)}}
+@keyframes drift{to{transform:scale(1.08) translateX(-30px)}}
+@keyframes pulse{50%{opacity:.5}}
+@keyframes modal-in{from{opacity:0;transform:translateY(16px) scale(.98)}}
+.spin{animation:spin 14s linear infinite}
+.sway{animation:sway 5s ease-in-out infinite;transform-origin:50% 90%}
+
+/* tablet + phone */
+@media (max-width:1280px){
+  .cards{position:static;display:flex;justify-content:center;gap:24px;margin-top:48px}
+  .card-wrap{position:relative;left:auto!important;right:auto!important;top:auto!important}
+  .card-wrap.right{display:none}
+  .deco.cd-m{display:block;width:72px;right:-28px;top:-26px}
+  .deco.book{display:none}
+  .tw{display:none}
+  .mission .grid{grid-template-columns:1fr}
+  .mission .photo{grid-column:1;height:auto;display:flex;justify-content:center;padding:20px 0 40px}
+  .mission .photo .glass{left:auto;right:8%;top:-10px;width:90px}
+  .mission .photo .chip{left:50%;top:auto;bottom:24px;transform:translateX(-50%)}
+  .why{grid-template-columns:1fr 1fr}
+  .sponsors .phone{width:120px;right:24px;bottom:24px}
+}
+@media (max-width:720px){
+  .nav .links{display:none}
+  .nav .links.open{display:flex;position:absolute;top:72px;left:16px;right:16px;flex-direction:column;align-items:stretch;gap:6px;padding:14px;border-radius:24px;background:rgba(28,22,34,.85);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16)}
+  .nav .links.open a:not(.btn){padding:12px}
+  .menu-btn{display:inline-flex}
+  .nav .mobile-mark{display:block}
+  .nav .beta-wide{display:none}
+  .hero-inner{padding:84px 20px 56px}
+  .beta-mobile{display:flex!important;margin-bottom:18px}
+  .hero-copy{text-align:left;align-items:stretch}
+  .ctas{flex-direction:column}
+  .ctas .btn{width:100%}
+  .fine{text-align:center}
+  .card{width:min(300px,80vw);height:360px}
+  .deco.cd-m{right:-8px;top:-20px;width:60px}
+  .cards{position:relative}
+  .steps,.why,.fields,.picks{grid-template-columns:1fr}
+  .sponsors .phone{display:none}
+  .final .btn{width:100%}
+  .final .ctas{align-self:stretch}
+  .pick img{height:96px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;animation-delay:0s!important;scroll-behavior:auto!important}
+  .kdots circle,.rise{opacity:1}
+  .anpai{clip-path:none}
+  .frame:not(:first-child){opacity:0!important}.frame:first-child{opacity:1!important}
+}
+</style>
 </head>
 <body>
-<x-dc>
-<helmet>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kanpai — where community events meet their sponsors</title>
-<meta name="description" content="Kanpai is where community events — book clubs, salons, run clubs, hackathons, meetups — meet their sponsors. Free to list, vetted hosts, SF first." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://kanpai.events/" />
-<meta property="og:title" content="Kanpai — where community events meet their sponsors" />
-<meta property="og:description" content="Book clubs, salons, run clubs, hackathons. Get funded by a startup that wants to be in the room." />
-<meta property="og:image" content="https://kanpai.events/og.png" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Kanpai — where community events meet their sponsors" />
-<meta name="twitter:description" content="Book clubs, salons, run clubs, hackathons. Get funded by a startup that wants to be in the room." />
-<meta name="twitter:image" content="https://kanpai.events/og.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet" />
-<style>
-  body { margin: 0; background-color: #F4F1EA; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E"); -webkit-font-smoothing: antialiased; }
-  a { color: #1E3A2B; text-decoration-color: rgba(30,58,43,0.35); text-underline-offset: 3px; }
-  a:hover { color: #0F1F16; text-decoration-color: rgba(30,58,43,0.9); }
-  ::placeholder { color: rgba(20,24,15,0.38); }
-  @keyframes gl-word-in { from { opacity: 0; transform: translateY(0.18em); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes gl-iris { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-  input:focus, select:focus { outline: none; border-color: #14180F !important; }
-</style>
-</helmet>
-<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#C3D7E2"></rect><text x="50" y="50" font-family="Georgia, serif" font-size="34" fill="#14180F" text-anchor="middle" dominant-baseline="central">乾</text></svg></template>
-<div style="min-height: 100vh; color: #14180F; font-family: 'Zen Kaku Gothic New', sans-serif; display: flex; flex-direction: column;">
 
-  <header style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; padding: 20px clamp(20px, 5vw, 40px); border-bottom: 1px solid rgba(20,24,15,0.12);">
-    <div style="font-family: 'Shippori Mincho', serif; font-size: 21px; letter-spacing: -0.01em; font-weight: 500;">Kanpai</div>
-    <div style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6A5C;">San Francisco &nbsp;·&nbsp; more cities soon</div>
-  </header>
+<header class="nav">
+  <span class="mobile-mark"><svg class="kmark" aria-hidden="true" viewBox="0 0 26 24"><g fill="url(#pearl)" transform="rotate(-4 12 12)"><circle cx="0.47" cy="0.44" r="0.47"/><circle cx="1.42" cy="0.51" r="0.44"/><circle cx="2.42" cy="0.50" r="0.41"/><circle cx="3.49" cy="0.42" r="0.41"/><circle cx="4.49" cy="0.56" r="0.42"/><circle cx="5.45" cy="0.52" r="0.49"/><circle cx="6.51" cy="0.48" r="0.50"/><circle cx="7.42" cy="0.56" r="0.43"/><circle cx="8.44" cy="0.43" r="0.43"/><circle cx="9.56" cy="0.44" r="0.46"/><circle cx="13.53" cy="0.48" r="0.46"/><circle cx="14.42" cy="0.42" r="0.42"/><circle cx="15.53" cy="0.49" r="0.43"/><circle cx="16.52" cy="0.49" r="0.43"/><circle cx="17.55" cy="0.54" r="0.43"/><circle cx="18.51" cy="0.50" r="0.49"/><circle cx="19.54" cy="0.46" r="0.50"/><circle cx="20.43" cy="0.49" r="0.48"/><circle cx="21.44" cy="0.50" r="0.41"/><circle cx="22.53" cy="0.55" r="0.46"/><circle cx="0.57" cy="1.47" r="0.47"/><circle cx="1.52" cy="1.51" r="0.45"/><circle cx="2.56" cy="1.58" r="0.45"/><circle cx="3.53" cy="1.42" r="0.47"/><circle cx="4.53" cy="1.59" r="0.48"/><circle cx="5.46" cy="1.48" r="0.47"/><circle cx="6.41" cy="1.49" r="0.42"/><circle cx="7.43" cy="1.42" r="0.48"/><circle cx="8.43" cy="1.45" r="0.44"/><circle cx="9.57" cy="1.42" r="0.45"/><circle cx="13.51" cy="1.57" r="0.48"/><circle cx="14.57" cy="1.46" r="0.44"/><circle cx="15.47" cy="1.57" r="0.49"/><circle cx="16.44" cy="1.44" r="0.43"/><circle cx="17.45" cy="1.50" r="0.46"/><circle cx="18.46" cy="1.41" r="0.44"/><circle cx="19.48" cy="1.51" r="0.49"/><circle cx="20.53" cy="1.50" r="0.46"/><circle cx="21.53" cy="1.42" r="0.49"/><circle cx="22.55" cy="1.57" r="0.48"/><circle cx="1.48" cy="2.48" r="0.41"/><circle cx="2.52" cy="2.42" r="0.41"/><circle cx="3.45" cy="2.44" r="0.44"/><circle cx="4.42" cy="2.41" r="0.42"/><circle cx="5.43" cy="2.48" r="0.41"/><circle cx="6.57" cy="2.52" r="0.42"/><circle cx="7.46" cy="2.47" r="0.44"/><circle cx="8.43" cy="2.56" r="0.50"/><circle cx="15.49" cy="2.50" r="0.41"/><circle cx="16.43" cy="2.47" r="0.43"/><circle cx="17.56" cy="2.44" r="0.41"/><circle cx="18.58" cy="2.51" r="0.42"/><circle cx="19.51" cy="2.41" r="0.45"/><circle cx="3.59" cy="3.57" r="0.47"/><circle cx="4.46" cy="3.48" r="0.42"/><circle cx="5.55" cy="3.51" r="0.48"/><circle cx="6.47" cy="3.45" r="0.48"/><circle cx="17.59" cy="3.56" r="0.48"/><circle cx="18.56" cy="3.54" r="0.43"/><circle cx="3.50" cy="4.47" r="0.41"/><circle cx="4.42" cy="4.46" r="0.43"/><circle cx="5.53" cy="4.58" r="0.45"/><circle cx="6.58" cy="4.59" r="0.49"/><circle cx="16.48" cy="4.45" r="0.43"/><circle cx="17.45" cy="4.45" r="0.46"/><circle cx="18.57" cy="4.56" r="0.45"/><circle cx="3.53" cy="5.55" r="0.41"/><circle cx="4.53" cy="5.57" r="0.48"/><circle cx="5.55" cy="5.50" r="0.42"/><circle cx="6.55" cy="5.47" r="0.48"/><circle cx="15.58" cy="5.48" r="0.44"/><circle cx="16.58" cy="5.54" r="0.42"/><circle cx="17.43" cy="5.44" r="0.49"/><circle cx="3.56" cy="6.44" r="0.48"/><circle cx="4.59" cy="6.53" r="0.44"/><circle cx="5.51" cy="6.43" r="0.41"/><circle cx="6.58" cy="6.53" r="0.45"/><circle cx="14.58" cy="6.49" r="0.49"/><circle cx="15.56" cy="6.45" r="0.43"/><circle cx="16.46" cy="6.45" r="0.46"/><circle cx="3.46" cy="7.49" r="0.42"/><circle cx="4.57" cy="7.47" r="0.45"/><circle cx="5.52" cy="7.57" r="0.44"/><circle cx="6.58" cy="7.50" r="0.45"/><circle cx="13.50" cy="7.41" r="0.45"/><circle cx="14.44" cy="7.41" r="0.48"/><circle cx="15.44" cy="7.50" r="0.47"/><circle cx="3.51" cy="8.47" r="0.45"/><circle cx="4.51" cy="8.55" r="0.41"/><circle cx="5.51" cy="8.45" r="0.43"/><circle cx="6.55" cy="8.50" r="0.46"/><circle cx="12.55" cy="8.57" r="0.45"/><circle cx="13.52" cy="8.50" r="0.45"/><circle cx="14.53" cy="8.49" r="0.45"/><circle cx="3.50" cy="9.58" r="0.47"/><circle cx="4.57" cy="9.58" r="0.43"/><circle cx="5.51" cy="9.58" r="0.48"/><circle cx="6.43" cy="9.43" r="0.45"/><circle cx="11.42" cy="9.45" r="0.41"/><circle cx="12.53" cy="9.55" r="0.49"/><circle cx="13.44" cy="9.54" r="0.47"/><circle cx="3.44" cy="10.57" r="0.50"/><circle cx="4.45" cy="10.58" r="0.44"/><circle cx="5.50" cy="10.59" r="0.48"/><circle cx="6.44" cy="10.49" r="0.45"/><circle cx="9.47" cy="10.45" r="0.43"/><circle cx="10.54" cy="10.41" r="0.46"/><circle cx="11.49" cy="10.41" r="0.44"/><circle cx="12.52" cy="10.50" r="0.41"/><circle cx="3.59" cy="11.55" r="0.50"/><circle cx="4.43" cy="11.46" r="0.41"/><circle cx="5.55" cy="11.46" r="0.42"/><circle cx="6.49" cy="11.57" r="0.48"/><circle cx="9.46" cy="11.44" r="0.49"/><circle cx="10.51" cy="11.54" r="0.41"/><circle cx="11.42" cy="11.53" r="0.44"/><circle cx="12.42" cy="11.58" r="0.46"/><circle cx="13.55" cy="11.43" r="0.48"/><circle cx="3.42" cy="12.57" r="0.45"/><circle cx="4.47" cy="12.51" r="0.49"/><circle cx="5.46" cy="12.43" r="0.45"/><circle cx="6.45" cy="12.43" r="0.42"/><circle cx="8.42" cy="12.45" r="0.43"/><circle cx="9.46" cy="12.55" r="0.43"/><circle cx="10.50" cy="12.44" r="0.44"/><circle cx="11.41" cy="12.46" r="0.41"/><circle cx="12.54" cy="12.51" r="0.42"/><circle cx="13.50" cy="12.58" r="0.41"/><circle cx="14.56" cy="12.49" r="0.45"/><circle cx="3.56" cy="13.48" r="0.45"/><circle cx="4.53" cy="13.59" r="0.44"/><circle cx="5.56" cy="13.54" r="0.46"/><circle cx="6.48" cy="13.47" r="0.41"/><circle cx="7.43" cy="13.42" r="0.47"/><circle cx="8.46" cy="13.44" r="0.41"/><circle cx="9.56" cy="13.57" r="0.47"/><circle cx="11.46" cy="13.45" r="0.43"/><circle cx="12.49" cy="13.44" r="0.45"/><circle cx="13.46" cy="13.58" r="0.50"/><circle cx="14.51" cy="13.45" r="0.49"/><circle cx="3.47" cy="14.47" r="0.40"/><circle cx="4.48" cy="14.50" r="0.45"/><circle cx="5.45" cy="14.50" r="0.40"/><circle cx="6.46" cy="14.43" r="0.44"/><circle cx="7.42" cy="14.41" r="0.43"/><circle cx="8.45" cy="14.52" r="0.45"/><circle cx="11.55" cy="14.53" r="0.47"/><circle cx="12.57" cy="14.48" r="0.43"/><circle cx="13.59" cy="14.44" r="0.47"/><circle cx="14.53" cy="14.42" r="0.48"/><circle cx="15.57" cy="14.52" r="0.47"/><circle cx="3.56" cy="15.44" r="0.45"/><circle cx="4.50" cy="15.56" r="0.48"/><circle cx="5.56" cy="15.52" r="0.49"/><circle cx="6.53" cy="15.53" r="0.43"/><circle cx="12.42" cy="15.43" r="0.44"/><circle cx="13.43" cy="15.56" r="0.46"/><circle cx="14.52" cy="15.52" r="0.47"/><circle cx="15.50" cy="15.41" r="0.48"/><circle cx="16.54" cy="15.50" r="0.45"/><circle cx="3.53" cy="16.42" r="0.47"/><circle cx="4.46" cy="16.42" r="0.43"/><circle cx="5.54" cy="16.45" r="0.47"/><circle cx="6.59" cy="16.50" r="0.44"/><circle cx="13.50" cy="16.53" r="0.48"/><circle cx="14.52" cy="16.53" r="0.41"/><circle cx="15.44" cy="16.46" r="0.47"/><circle cx="16.46" cy="16.51" r="0.41"/><circle cx="17.42" cy="16.46" r="0.47"/><circle cx="3.53" cy="17.53" r="0.43"/><circle cx="4.50" cy="17.49" r="0.45"/><circle cx="5.43" cy="17.57" r="0.42"/><circle cx="6.59" cy="17.58" r="0.41"/><circle cx="14.49" cy="17.56" r="0.50"/><circle cx="15.49" cy="17.46" r="0.42"/><circle cx="16.58" cy="17.45" r="0.46"/><circle cx="17.44" cy="17.50" r="0.49"/><circle cx="18.43" cy="17.56" r="0.45"/><circle cx="3.57" cy="18.54" r="0.43"/><circle cx="4.57" cy="18.50" r="0.41"/><circle cx="5.41" cy="18.50" r="0.45"/><circle cx="6.46" cy="18.44" r="0.44"/><circle cx="15.47" cy="18.56" r="0.40"/><circle cx="16.55" cy="18.56" r="0.42"/><circle cx="17.58" cy="18.54" r="0.49"/><circle cx="18.46" cy="18.48" r="0.44"/><circle cx="3.59" cy="19.52" r="0.44"/><circle cx="4.49" cy="19.46" r="0.41"/><circle cx="5.43" cy="19.56" r="0.43"/><circle cx="6.58" cy="19.45" r="0.43"/><circle cx="15.50" cy="19.44" r="0.44"/><circle cx="16.58" cy="19.57" r="0.48"/><circle cx="17.52" cy="19.57" r="0.49"/><circle cx="18.51" cy="19.54" r="0.41"/><circle cx="19.54" cy="19.49" r="0.47"/><circle cx="3.53" cy="20.46" r="0.41"/><circle cx="4.58" cy="20.43" r="0.45"/><circle cx="5.47" cy="20.46" r="0.47"/><circle cx="6.59" cy="20.46" r="0.47"/><circle cx="16.46" cy="20.51" r="0.44"/><circle cx="17.44" cy="20.44" r="0.42"/><circle cx="18.57" cy="20.50" r="0.42"/><circle cx="19.57" cy="20.59" r="0.45"/><circle cx="20.44" cy="20.44" r="0.41"/><circle cx="1.47" cy="21.43" r="0.43"/><circle cx="2.46" cy="21.51" r="0.49"/><circle cx="3.54" cy="21.48" r="0.44"/><circle cx="4.50" cy="21.48" r="0.44"/><circle cx="5.42" cy="21.46" r="0.50"/><circle cx="6.43" cy="21.50" r="0.46"/><circle cx="7.57" cy="21.45" r="0.43"/><circle cx="8.45" cy="21.48" r="0.45"/><circle cx="15.58" cy="21.56" r="0.49"/><circle cx="16.41" cy="21.42" r="0.47"/><circle cx="17.57" cy="21.50" r="0.46"/><circle cx="18.41" cy="21.48" r="0.49"/><circle cx="19.56" cy="21.56" r="0.50"/><circle cx="20.45" cy="21.43" r="0.42"/><circle cx="21.50" cy="21.53" r="0.49"/><circle cx="0.54" cy="22.53" r="0.48"/><circle cx="1.49" cy="22.51" r="0.41"/><circle cx="2.55" cy="22.45" r="0.49"/><circle cx="3.53" cy="22.46" r="0.42"/><circle cx="4.46" cy="22.52" r="0.47"/><circle cx="5.43" cy="22.42" r="0.45"/><circle cx="6.51" cy="22.48" r="0.43"/><circle cx="7.52" cy="22.41" r="0.43"/><circle cx="8.49" cy="22.58" r="0.46"/><circle cx="9.57" cy="22.50" r="0.43"/><circle cx="13.45" cy="22.58" r="0.47"/><circle cx="14.47" cy="22.41" r="0.45"/><circle cx="15.53" cy="22.49" r="0.43"/><circle cx="16.53" cy="22.58" r="0.43"/><circle cx="17.42" cy="22.47" r="0.44"/><circle cx="18.53" cy="22.45" r="0.48"/><circle cx="19.54" cy="22.50" r="0.42"/><circle cx="20.58" cy="22.47" r="0.48"/><circle cx="21.45" cy="22.45" r="0.48"/><circle cx="22.46" cy="22.58" r="0.45"/><circle cx="23.44" cy="22.45" r="0.44"/><circle cx="0.53" cy="23.58" r="0.42"/><circle cx="1.48" cy="23.45" r="0.50"/><circle cx="2.44" cy="23.42" r="0.41"/><circle cx="3.48" cy="23.57" r="0.49"/><circle cx="4.54" cy="23.59" r="0.49"/><circle cx="5.47" cy="23.44" r="0.49"/><circle cx="6.54" cy="23.42" r="0.47"/><circle cx="7.48" cy="23.48" r="0.44"/><circle cx="8.44" cy="23.41" r="0.43"/><circle cx="9.47" cy="23.58" r="0.42"/><circle cx="13.58" cy="23.45" r="0.44"/><circle cx="14.56" cy="23.56" r="0.44"/><circle cx="15.42" cy="23.50" r="0.44"/><circle cx="16.58" cy="23.44" r="0.44"/><circle cx="17.57" cy="23.42" r="0.44"/><circle cx="18.56" cy="23.55" r="0.41"/><circle cx="19.42" cy="23.42" r="0.49"/><circle cx="20.46" cy="23.54" r="0.49"/><circle cx="21.47" cy="23.46" r="0.49"/><circle cx="22.52" cy="23.46" r="0.47"/><circle cx="23.47" cy="23.46" r="0.40"/><circle cx="24.00" cy="3.00" r=".34"/><circle cx="24.00" cy="7.00" r=".34"/><circle cx="22.00" cy="5.00" r=".34"/><circle cx="26.00" cy="5.00" r=".34"/><circle cx="22.50" cy="3.50" r=".34"/><circle cx="25.50" cy="3.50" r=".34"/><circle cx="22.50" cy="6.50" r=".34"/><circle cx="25.50" cy="6.50" r=".34"/><circle cx="24" cy="5" r=".55"/></g></svg></span>
+  <span class="chip beta-wide rise" style="--rd:2s"><span class="dot"></span>Beta · applications open for hosts &amp; sponsors</span>
+  <nav class="links" id="menu" aria-label="Main">
+    <a href="#why">About</a>
+    <a href="#how">How it works</a>
+    <a href="#sponsors">For sponsors</a>
+    <button class="btn primary" type="button" data-open="choose">Get involved</button>
+  </nav>
+  <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+    <svg aria-hidden="true" viewBox="0 0 18 12" width="18" height="12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M0 1h18M0 6h18M0 11h18"/></svg>
+  </button>
+</header>
 
-  <main style="flex: 1; display: flex; flex-wrap: wrap; flex-direction: row; align-items: stretch; gap: 0;">
-
-    <aside style="order: 2; flex: 1 1 400px; background: #C3D7E2; color: #14180F; padding: clamp(44px, 7vw, 88px) clamp(20px, 5vw, 40px); box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 26px; align-self: stretch;">
-
-      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
-        <div style="display: flex; flex-direction: column; gap: 26px; width: 100%; max-width: 460px;">
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <h2 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: 30px; line-height: 1.15; letter-spacing: -0.01em;">Join the first cohort</h2>
-            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: rgba(20,24,15,0.78);">Taking the first SF cohort now. Hosts are reviewed by us before they're listed.</p>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 5px; border: 1px solid rgba(20,24,15,0.22); border-radius: 6px;">
-            <button type="button" onClick="{{ pickHost }}" style="{{ hostTabStyle }}">I host events</button>
-            <button type="button" onClick="{{ pickStartup }}" style="{{ startupTabStyle }}">I sponsor events</button>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 16px;">
-            <label style="display: flex; flex-direction: column; gap: 7px;">
-              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Name</span>
-              <input type="text" value="{{ name }}" onChange="{{ setName }}" placeholder="Your name" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
-            </label>
-
-            <label style="display: flex; flex-direction: column; gap: 7px;">
-              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Email</span>
-              <input type="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@company.com" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
-            </label>
-
-            <label style="display: flex; flex-direction: column; gap: 7px;">
-              <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">City</span>
-              <select value="{{ city }}" onChange="{{ setCity }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
-                <option value="sf" style="color: #14180F;">San Francisco</option>
-                <option value="nyc" style="color: #14180F;">New York</option>
-                <option value="la" style="color: #14180F;">Los Angeles</option>
-                <option value="other" style="color: #14180F;">Somewhere else</option>
-              </select>
-            </label>
-
-            <sc-if value="{{ isHost }}" hint-placeholder-val="{{ true }}">
-              <label style="display: flex; flex-direction: column; gap: 7px;">
-                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">What do you host?</span>
-                <select value="{{ eventType }}" onChange="{{ setEventType }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
-                  <option value="salon" style="color: #14180F;">Salon or supper club</option>
-                  <option value="party" style="color: #14180F;">Party</option>
-                  <option value="runclub" style="color: #14180F;">Run club</option>
-                  <option value="hacknight" style="color: #14180F;">Hack night or demo night</option>
-                  <option value="conference" style="color: #14180F;">Conference or summit</option>
-                  <option value="other" style="color: #14180F;">Something else</option>
-                </select>
-              </label>
-
-              <label style="display: flex; flex-direction: column; gap: 7px;">
-                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Where you've hosted before</span>
-                <input type="text" value="{{ hostLink }}" onChange="{{ setHostLink }}" placeholder="A link, or tell us where" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
-                <span style="font-size: 12px; line-height: 1.55; color: rgba(20,24,15,0.62);">A past event page, your profile, or the Discord or group chat you run. This is what we review.</span>
-              </label>
-            </sc-if>
-
-            <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
-              <label style="display: flex; flex-direction: column; gap: 7px;">
-                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">What can you offer?</span>
-                <select value="{{ offer }}" onChange="{{ setOffer }}" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F; appearance: none;">
-                  <option value="cash" style="color: #14180F;">Money</option>
-                  <option value="space" style="color: #14180F;">Our space</option>
-                  <option value="product" style="color: #14180F;">Product or credits</option>
-                  <option value="food" style="color: #14180F;">Food &amp; drink</option>
-                  <option value="unsure" style="color: #14180F;">Not sure yet</option>
-                </select>
-              </label>
-
-              <label style="display: flex; flex-direction: column; gap: 7px;">
-                <span style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(20,24,15,0.75);">Associated org <span style="text-transform: none; letter-spacing: 0; color: rgba(20,24,15,0.5);">(optional)</span></span>
-                <input type="text" value="{{ org }}" onChange="{{ setOrg }}" placeholder="Company, fund or collective" style="background: rgba(255,255,255,0.45); border: 1px solid rgba(20,24,15,0.22); border-radius: 5px; padding: 13px 14px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 16px; color: #14180F;" />
-                <span style="font-size: 12px; line-height: 1.55; color: rgba(20,24,15,0.62);">Leave blank if you're sponsoring as an individual.</span>
-              </label>
-            </sc-if>
-
-            <button type="button" onClick="{{ submit }}" style="margin-top: 4px; background: #14180F; color: #F4F1EA; border: none; border-radius: 5px; padding: 15px 20px; font-family: 'Zen Kaku Gothic New', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 120ms ease, background 120ms ease;" style-hover="background: #2A3020; transform: translateY(-1px);" style-active="transform: translateY(0);">{{ submitLabel }}</button>
-
-            <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
-              <p style="margin: 0; font-size: 13px; line-height: 1.55; color: #8C2F1D;">{{ error }}</p>
-            </sc-if>
-
-            <p style="margin: 0; font-size: 12px; line-height: 1.6; color: rgba(20,24,15,0.68);">No spam. We'll email once when the beta opens.</p>
-          </div>
-        </div>
-      </sc-if>
-
-      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
-        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 420px; padding: 40px 0;">
-          <div style="font-family: 'Shippori Mincho', serif; font-size: 34px; line-height: 1.1;">You're on the list.</div>
-          <p style="margin: 0; font-size: 15px; line-height: 1.65; color: rgba(20,24,15,0.68);">{{ confirmLine }}</p>
-          <p style="margin: 0; font-size: 15px; line-height: 1.65; color: rgba(20,24,15,0.68);">Reply to that email with what's next on your calendar and we'll get it listed first.</p>
-        </div>
-      </sc-if>
-
-      <div style="margin-top: auto; padding-top: 40px; border-top: 1px solid rgba(20,24,15,0.16); width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 6px;">
-        <div style="font-size: 13px; color: rgba(20,24,15,0.68);">Free to list. We take 10% when money changes hands, nothing when it doesn't.</div>
+<main>
+<section class="hero" aria-label="Kanpai">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="scan" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="chip beta-mobile" style="display:none"><span class="dot"></span>Beta · applications open</span>
+    <div><svg class="wordmark" role="img" aria-label="Kanpai" viewBox="0 0 102.5 24.6" overflow="visible"><defs><linearGradient id="pearl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#f3d3ff"/><stop offset=".6" stop-color="#c8ecff"/><stop offset=".85" stop-color="#ffe9c2"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><g class="kdots" fill="url(#pearl)" transform="rotate(-4 12 12)"><circle cx="0.47" cy="0.44" r="0.47" style="--d:0.17s"/><circle cx="1.42" cy="0.51" r="0.44" style="--d:0.17s"/><circle cx="2.42" cy="0.50" r="0.41" style="--d:0.17s"/><circle cx="3.49" cy="0.42" r="0.41" style="--d:0.17s"/><circle cx="4.49" cy="0.56" r="0.42" style="--d:0.17s"/><circle cx="5.45" cy="0.52" r="0.49" style="--d:0.17s"/><circle cx="6.51" cy="0.48" r="0.50" style="--d:0.17s"/><circle cx="7.42" cy="0.56" r="0.43" style="--d:0.17s"/><circle cx="8.44" cy="0.43" r="0.43" style="--d:0.17s"/><circle cx="9.56" cy="0.44" r="0.46" style="--d:0.17s"/><circle cx="13.53" cy="0.48" r="0.46" style="--d:0.17s"/><circle cx="14.42" cy="0.42" r="0.42" style="--d:0.17s"/><circle cx="15.53" cy="0.49" r="0.43" style="--d:0.17s"/><circle cx="16.52" cy="0.49" r="0.43" style="--d:0.17s"/><circle cx="17.55" cy="0.54" r="0.43" style="--d:0.17s"/><circle cx="18.51" cy="0.50" r="0.49" style="--d:0.17s"/><circle cx="19.54" cy="0.46" r="0.50" style="--d:0.17s"/><circle cx="20.43" cy="0.49" r="0.48" style="--d:0.17s"/><circle cx="21.44" cy="0.50" r="0.41" style="--d:0.17s"/><circle cx="22.53" cy="0.55" r="0.46" style="--d:0.17s"/><circle cx="0.57" cy="1.47" r="0.47" style="--d:0.21s"/><circle cx="1.52" cy="1.51" r="0.45" style="--d:0.21s"/><circle cx="2.56" cy="1.58" r="0.45" style="--d:0.21s"/><circle cx="3.53" cy="1.42" r="0.47" style="--d:0.21s"/><circle cx="4.53" cy="1.59" r="0.48" style="--d:0.21s"/><circle cx="5.46" cy="1.48" r="0.47" style="--d:0.21s"/><circle cx="6.41" cy="1.49" r="0.42" style="--d:0.21s"/><circle cx="7.43" cy="1.42" r="0.48" style="--d:0.21s"/><circle cx="8.43" cy="1.45" r="0.44" style="--d:0.21s"/><circle cx="9.57" cy="1.42" r="0.45" style="--d:0.21s"/><circle cx="13.51" cy="1.57" r="0.48" style="--d:0.21s"/><circle cx="14.57" cy="1.46" r="0.44" style="--d:0.21s"/><circle cx="15.47" cy="1.57" r="0.49" style="--d:0.21s"/><circle cx="16.44" cy="1.44" r="0.43" style="--d:0.21s"/><circle cx="17.45" cy="1.50" r="0.46" style="--d:0.21s"/><circle cx="18.46" cy="1.41" r="0.44" style="--d:0.21s"/><circle cx="19.48" cy="1.51" r="0.49" style="--d:0.21s"/><circle cx="20.53" cy="1.50" r="0.46" style="--d:0.21s"/><circle cx="21.53" cy="1.42" r="0.49" style="--d:0.21s"/><circle cx="22.55" cy="1.57" r="0.48" style="--d:0.21s"/><circle cx="1.48" cy="2.48" r="0.41" style="--d:0.25s"/><circle cx="2.52" cy="2.42" r="0.41" style="--d:0.25s"/><circle cx="3.45" cy="2.44" r="0.44" style="--d:0.25s"/><circle cx="4.42" cy="2.41" r="0.42" style="--d:0.25s"/><circle cx="5.43" cy="2.48" r="0.41" style="--d:0.25s"/><circle cx="6.57" cy="2.52" r="0.42" style="--d:0.25s"/><circle cx="7.46" cy="2.47" r="0.44" style="--d:0.25s"/><circle cx="8.43" cy="2.56" r="0.50" style="--d:0.25s"/><circle cx="15.49" cy="2.50" r="0.41" style="--d:0.25s"/><circle cx="16.43" cy="2.47" r="0.43" style="--d:0.25s"/><circle cx="17.56" cy="2.44" r="0.41" style="--d:0.25s"/><circle cx="18.58" cy="2.51" r="0.42" style="--d:0.25s"/><circle cx="19.51" cy="2.41" r="0.45" style="--d:0.25s"/><circle cx="3.59" cy="3.57" r="0.47" style="--d:0.29s"/><circle cx="4.46" cy="3.48" r="0.42" style="--d:0.29s"/><circle cx="5.55" cy="3.51" r="0.48" style="--d:0.29s"/><circle cx="6.47" cy="3.45" r="0.48" style="--d:0.29s"/><circle cx="17.59" cy="3.56" r="0.48" style="--d:0.29s"/><circle cx="18.56" cy="3.54" r="0.43" style="--d:0.29s"/><circle cx="3.50" cy="4.47" r="0.41" style="--d:0.33s"/><circle cx="4.42" cy="4.46" r="0.43" style="--d:0.33s"/><circle cx="5.53" cy="4.58" r="0.45" style="--d:0.33s"/><circle cx="6.58" cy="4.59" r="0.49" style="--d:0.33s"/><circle cx="16.48" cy="4.45" r="0.43" style="--d:0.33s"/><circle cx="17.45" cy="4.45" r="0.46" style="--d:0.33s"/><circle cx="18.57" cy="4.56" r="0.45" style="--d:0.33s"/><circle cx="3.53" cy="5.55" r="0.41" style="--d:0.37s"/><circle cx="4.53" cy="5.57" r="0.48" style="--d:0.37s"/><circle cx="5.55" cy="5.50" r="0.42" style="--d:0.37s"/><circle cx="6.55" cy="5.47" r="0.48" style="--d:0.37s"/><circle cx="15.58" cy="5.48" r="0.44" style="--d:0.37s"/><circle cx="16.58" cy="5.54" r="0.42" style="--d:0.37s"/><circle cx="17.43" cy="5.44" r="0.49" style="--d:0.37s"/><circle cx="3.56" cy="6.44" r="0.48" style="--d:0.41s"/><circle cx="4.59" cy="6.53" r="0.44" style="--d:0.41s"/><circle cx="5.51" cy="6.43" r="0.41" style="--d:0.41s"/><circle cx="6.58" cy="6.53" r="0.45" style="--d:0.41s"/><circle cx="14.58" cy="6.49" r="0.49" style="--d:0.41s"/><circle cx="15.56" cy="6.45" r="0.43" style="--d:0.41s"/><circle cx="16.46" cy="6.45" r="0.46" style="--d:0.41s"/><circle cx="3.46" cy="7.49" r="0.42" style="--d:0.45s"/><circle cx="4.57" cy="7.47" r="0.45" style="--d:0.45s"/><circle cx="5.52" cy="7.57" r="0.44" style="--d:0.45s"/><circle cx="6.58" cy="7.50" r="0.45" style="--d:0.45s"/><circle cx="13.50" cy="7.41" r="0.45" style="--d:0.45s"/><circle cx="14.44" cy="7.41" r="0.48" style="--d:0.45s"/><circle cx="15.44" cy="7.50" r="0.47" style="--d:0.45s"/><circle cx="3.51" cy="8.47" r="0.45" style="--d:0.49s"/><circle cx="4.51" cy="8.55" r="0.41" style="--d:0.49s"/><circle cx="5.51" cy="8.45" r="0.43" style="--d:0.49s"/><circle cx="6.55" cy="8.50" r="0.46" style="--d:0.49s"/><circle cx="12.55" cy="8.57" r="0.45" style="--d:0.49s"/><circle cx="13.52" cy="8.50" r="0.45" style="--d:0.49s"/><circle cx="14.53" cy="8.49" r="0.45" style="--d:0.49s"/><circle cx="3.50" cy="9.58" r="0.47" style="--d:0.53s"/><circle cx="4.57" cy="9.58" r="0.43" style="--d:0.53s"/><circle cx="5.51" cy="9.58" r="0.48" style="--d:0.53s"/><circle cx="6.43" cy="9.43" r="0.45" style="--d:0.53s"/><circle cx="11.42" cy="9.45" r="0.41" style="--d:0.53s"/><circle cx="12.53" cy="9.55" r="0.49" style="--d:0.53s"/><circle cx="13.44" cy="9.54" r="0.47" style="--d:0.53s"/><circle cx="3.44" cy="10.57" r="0.50" style="--d:0.57s"/><circle cx="4.45" cy="10.58" r="0.44" style="--d:0.57s"/><circle cx="5.50" cy="10.59" r="0.48" style="--d:0.57s"/><circle cx="6.44" cy="10.49" r="0.45" style="--d:0.57s"/><circle cx="9.47" cy="10.45" r="0.43" style="--d:0.57s"/><circle cx="10.54" cy="10.41" r="0.46" style="--d:0.57s"/><circle cx="11.49" cy="10.41" r="0.44" style="--d:0.57s"/><circle cx="12.52" cy="10.50" r="0.41" style="--d:0.57s"/><circle cx="3.59" cy="11.55" r="0.50" style="--d:0.61s"/><circle cx="4.43" cy="11.46" r="0.41" style="--d:0.61s"/><circle cx="5.55" cy="11.46" r="0.42" style="--d:0.61s"/><circle cx="6.49" cy="11.57" r="0.48" style="--d:0.61s"/><circle cx="9.46" cy="11.44" r="0.49" style="--d:0.61s"/><circle cx="10.51" cy="11.54" r="0.41" style="--d:0.61s"/><circle cx="11.42" cy="11.53" r="0.44" style="--d:0.61s"/><circle cx="12.42" cy="11.58" r="0.46" style="--d:0.61s"/><circle cx="13.55" cy="11.43" r="0.48" style="--d:0.61s"/><circle cx="3.42" cy="12.57" r="0.45" style="--d:0.65s"/><circle cx="4.47" cy="12.51" r="0.49" style="--d:0.65s"/><circle cx="5.46" cy="12.43" r="0.45" style="--d:0.65s"/><circle cx="6.45" cy="12.43" r="0.42" style="--d:0.65s"/><circle cx="8.42" cy="12.45" r="0.43" style="--d:0.65s"/><circle cx="9.46" cy="12.55" r="0.43" style="--d:0.65s"/><circle cx="10.50" cy="12.44" r="0.44" style="--d:0.65s"/><circle cx="11.41" cy="12.46" r="0.41" style="--d:0.65s"/><circle cx="12.54" cy="12.51" r="0.42" style="--d:0.65s"/><circle cx="13.50" cy="12.58" r="0.41" style="--d:0.65s"/><circle cx="14.56" cy="12.49" r="0.45" style="--d:0.65s"/><circle cx="3.56" cy="13.48" r="0.45" style="--d:0.69s"/><circle cx="4.53" cy="13.59" r="0.44" style="--d:0.69s"/><circle cx="5.56" cy="13.54" r="0.46" style="--d:0.69s"/><circle cx="6.48" cy="13.47" r="0.41" style="--d:0.69s"/><circle cx="7.43" cy="13.42" r="0.47" style="--d:0.69s"/><circle cx="8.46" cy="13.44" r="0.41" style="--d:0.69s"/><circle cx="9.56" cy="13.57" r="0.47" style="--d:0.69s"/><circle cx="11.46" cy="13.45" r="0.43" style="--d:0.69s"/><circle cx="12.49" cy="13.44" r="0.45" style="--d:0.69s"/><circle cx="13.46" cy="13.58" r="0.50" style="--d:0.69s"/><circle cx="14.51" cy="13.45" r="0.49" style="--d:0.69s"/><circle cx="3.47" cy="14.47" r="0.40" style="--d:0.73s"/><circle cx="4.48" cy="14.50" r="0.45" style="--d:0.73s"/><circle cx="5.45" cy="14.50" r="0.40" style="--d:0.73s"/><circle cx="6.46" cy="14.43" r="0.44" style="--d:0.73s"/><circle cx="7.42" cy="14.41" r="0.43" style="--d:0.73s"/><circle cx="8.45" cy="14.52" r="0.45" style="--d:0.73s"/><circle cx="11.55" cy="14.53" r="0.47" style="--d:0.73s"/><circle cx="12.57" cy="14.48" r="0.43" style="--d:0.73s"/><circle cx="13.59" cy="14.44" r="0.47" style="--d:0.73s"/><circle cx="14.53" cy="14.42" r="0.48" style="--d:0.73s"/><circle cx="15.57" cy="14.52" r="0.47" style="--d:0.73s"/><circle cx="3.56" cy="15.44" r="0.45" style="--d:0.77s"/><circle cx="4.50" cy="15.56" r="0.48" style="--d:0.77s"/><circle cx="5.56" cy="15.52" r="0.49" style="--d:0.77s"/><circle cx="6.53" cy="15.53" r="0.43" style="--d:0.77s"/><circle cx="12.42" cy="15.43" r="0.44" style="--d:0.77s"/><circle cx="13.43" cy="15.56" r="0.46" style="--d:0.77s"/><circle cx="14.52" cy="15.52" r="0.47" style="--d:0.77s"/><circle cx="15.50" cy="15.41" r="0.48" style="--d:0.77s"/><circle cx="16.54" cy="15.50" r="0.45" style="--d:0.77s"/><circle cx="3.53" cy="16.42" r="0.47" style="--d:0.81s"/><circle cx="4.46" cy="16.42" r="0.43" style="--d:0.81s"/><circle cx="5.54" cy="16.45" r="0.47" style="--d:0.81s"/><circle cx="6.59" cy="16.50" r="0.44" style="--d:0.81s"/><circle cx="13.50" cy="16.53" r="0.48" style="--d:0.81s"/><circle cx="14.52" cy="16.53" r="0.41" style="--d:0.81s"/><circle cx="15.44" cy="16.46" r="0.47" style="--d:0.81s"/><circle cx="16.46" cy="16.51" r="0.41" style="--d:0.81s"/><circle cx="17.42" cy="16.46" r="0.47" style="--d:0.81s"/><circle cx="3.53" cy="17.53" r="0.43" style="--d:0.85s"/><circle cx="4.50" cy="17.49" r="0.45" style="--d:0.85s"/><circle cx="5.43" cy="17.57" r="0.42" style="--d:0.85s"/><circle cx="6.59" cy="17.58" r="0.41" style="--d:0.85s"/><circle cx="14.49" cy="17.56" r="0.50" style="--d:0.85s"/><circle cx="15.49" cy="17.46" r="0.42" style="--d:0.85s"/><circle cx="16.58" cy="17.45" r="0.46" style="--d:0.85s"/><circle cx="17.44" cy="17.50" r="0.49" style="--d:0.85s"/><circle cx="18.43" cy="17.56" r="0.45" style="--d:0.85s"/><circle cx="3.57" cy="18.54" r="0.43" style="--d:0.89s"/><circle cx="4.57" cy="18.50" r="0.41" style="--d:0.89s"/><circle cx="5.41" cy="18.50" r="0.45" style="--d:0.89s"/><circle cx="6.46" cy="18.44" r="0.44" style="--d:0.89s"/><circle cx="15.47" cy="18.56" r="0.40" style="--d:0.89s"/><circle cx="16.55" cy="18.56" r="0.42" style="--d:0.89s"/><circle cx="17.58" cy="18.54" r="0.49" style="--d:0.89s"/><circle cx="18.46" cy="18.48" r="0.44" style="--d:0.89s"/><circle cx="3.59" cy="19.52" r="0.44" style="--d:0.93s"/><circle cx="4.49" cy="19.46" r="0.41" style="--d:0.93s"/><circle cx="5.43" cy="19.56" r="0.43" style="--d:0.93s"/><circle cx="6.58" cy="19.45" r="0.43" style="--d:0.93s"/><circle cx="15.50" cy="19.44" r="0.44" style="--d:0.93s"/><circle cx="16.58" cy="19.57" r="0.48" style="--d:0.93s"/><circle cx="17.52" cy="19.57" r="0.49" style="--d:0.93s"/><circle cx="18.51" cy="19.54" r="0.41" style="--d:0.93s"/><circle cx="19.54" cy="19.49" r="0.47" style="--d:0.93s"/><circle cx="3.53" cy="20.46" r="0.41" style="--d:0.97s"/><circle cx="4.58" cy="20.43" r="0.45" style="--d:0.97s"/><circle cx="5.47" cy="20.46" r="0.47" style="--d:0.97s"/><circle cx="6.59" cy="20.46" r="0.47" style="--d:0.97s"/><circle cx="16.46" cy="20.51" r="0.44" style="--d:0.97s"/><circle cx="17.44" cy="20.44" r="0.42" style="--d:0.97s"/><circle cx="18.57" cy="20.50" r="0.42" style="--d:0.97s"/><circle cx="19.57" cy="20.59" r="0.45" style="--d:0.97s"/><circle cx="20.44" cy="20.44" r="0.41" style="--d:0.97s"/><circle cx="1.47" cy="21.43" r="0.43" style="--d:1.01s"/><circle cx="2.46" cy="21.51" r="0.49" style="--d:1.01s"/><circle cx="3.54" cy="21.48" r="0.44" style="--d:1.01s"/><circle cx="4.50" cy="21.48" r="0.44" style="--d:1.01s"/><circle cx="5.42" cy="21.46" r="0.50" style="--d:1.01s"/><circle cx="6.43" cy="21.50" r="0.46" style="--d:1.01s"/><circle cx="7.57" cy="21.45" r="0.43" style="--d:1.01s"/><circle cx="8.45" cy="21.48" r="0.45" style="--d:1.01s"/><circle cx="15.58" cy="21.56" r="0.49" style="--d:1.01s"/><circle cx="16.41" cy="21.42" r="0.47" style="--d:1.01s"/><circle cx="17.57" cy="21.50" r="0.46" style="--d:1.01s"/><circle cx="18.41" cy="21.48" r="0.49" style="--d:1.01s"/><circle cx="19.56" cy="21.56" r="0.50" style="--d:1.01s"/><circle cx="20.45" cy="21.43" r="0.42" style="--d:1.01s"/><circle cx="21.50" cy="21.53" r="0.49" style="--d:1.01s"/><circle cx="0.54" cy="22.53" r="0.48" style="--d:1.05s"/><circle cx="1.49" cy="22.51" r="0.41" style="--d:1.05s"/><circle cx="2.55" cy="22.45" r="0.49" style="--d:1.05s"/><circle cx="3.53" cy="22.46" r="0.42" style="--d:1.05s"/><circle cx="4.46" cy="22.52" r="0.47" style="--d:1.05s"/><circle cx="5.43" cy="22.42" r="0.45" style="--d:1.05s"/><circle cx="6.51" cy="22.48" r="0.43" style="--d:1.05s"/><circle cx="7.52" cy="22.41" r="0.43" style="--d:1.05s"/><circle cx="8.49" cy="22.58" r="0.46" style="--d:1.05s"/><circle cx="9.57" cy="22.50" r="0.43" style="--d:1.05s"/><circle cx="13.45" cy="22.58" r="0.47" style="--d:1.05s"/><circle cx="14.47" cy="22.41" r="0.45" style="--d:1.05s"/><circle cx="15.53" cy="22.49" r="0.43" style="--d:1.05s"/><circle cx="16.53" cy="22.58" r="0.43" style="--d:1.05s"/><circle cx="17.42" cy="22.47" r="0.44" style="--d:1.05s"/><circle cx="18.53" cy="22.45" r="0.48" style="--d:1.05s"/><circle cx="19.54" cy="22.50" r="0.42" style="--d:1.05s"/><circle cx="20.58" cy="22.47" r="0.48" style="--d:1.05s"/><circle cx="21.45" cy="22.45" r="0.48" style="--d:1.05s"/><circle cx="22.46" cy="22.58" r="0.45" style="--d:1.05s"/><circle cx="23.44" cy="22.45" r="0.44" style="--d:1.05s"/><circle cx="0.53" cy="23.58" r="0.42" style="--d:1.09s"/><circle cx="1.48" cy="23.45" r="0.50" style="--d:1.09s"/><circle cx="2.44" cy="23.42" r="0.41" style="--d:1.09s"/><circle cx="3.48" cy="23.57" r="0.49" style="--d:1.09s"/><circle cx="4.54" cy="23.59" r="0.49" style="--d:1.09s"/><circle cx="5.47" cy="23.44" r="0.49" style="--d:1.09s"/><circle cx="6.54" cy="23.42" r="0.47" style="--d:1.09s"/><circle cx="7.48" cy="23.48" r="0.44" style="--d:1.09s"/><circle cx="8.44" cy="23.41" r="0.43" style="--d:1.09s"/><circle cx="9.47" cy="23.58" r="0.42" style="--d:1.09s"/><circle cx="13.58" cy="23.45" r="0.44" style="--d:1.09s"/><circle cx="14.56" cy="23.56" r="0.44" style="--d:1.09s"/><circle cx="15.42" cy="23.50" r="0.44" style="--d:1.09s"/><circle cx="16.58" cy="23.44" r="0.44" style="--d:1.09s"/><circle cx="17.57" cy="23.42" r="0.44" style="--d:1.09s"/><circle cx="18.56" cy="23.55" r="0.41" style="--d:1.09s"/><circle cx="19.42" cy="23.42" r="0.49" style="--d:1.09s"/><circle cx="20.46" cy="23.54" r="0.49" style="--d:1.09s"/><circle cx="21.47" cy="23.46" r="0.49" style="--d:1.09s"/><circle cx="22.52" cy="23.46" r="0.47" style="--d:1.09s"/><circle cx="23.47" cy="23.46" r="0.40" style="--d:1.09s"/><circle cx="24.00" cy="3.00" r=".34" style="--d:0.27s"/><circle cx="24.00" cy="7.00" r=".34" style="--d:0.43s"/><circle cx="22.00" cy="5.00" r=".34" style="--d:0.35s"/><circle cx="26.00" cy="5.00" r=".34" style="--d:0.35s"/><circle cx="22.50" cy="3.50" r=".34" style="--d:0.29s"/><circle cx="25.50" cy="3.50" r=".34" style="--d:0.29s"/><circle cx="22.50" cy="6.50" r=".34" style="--d:0.41s"/><circle cx="25.50" cy="6.50" r=".34" style="--d:0.41s"/><circle cx="24" cy="5" r=".55" style="--d:0.35s"/></g><text class="anpai" x="28.5" y="24" textLength="74" lengthAdjust="spacing" fill="currentColor" font-family="Instrument Serif, serif" font-size="33.33">ANPAI</text></svg></div>
+    <div class="hero-copy rise" style="--rd:2.1s">
+      <h1>Good things happen when people get together.</h1>
+      <p>Kanpai is where community hosts list their gatherings and sponsors find the ones worth backing. Supper clubs, salons, run clubs, hack nights, all real and in person.</p>
+      <div class="ctas">
+        <button class="btn primary" type="button" data-open="sponsor">Become a sponsor</button>
+        <button class="btn ghost" type="button" data-open="host">Apply to host</button>
       </div>
-    </aside>
+      <span class="fine">Free to apply · Hosts are reviewed · Starting in San Francisco</span>
+    </div>
+    <div class="cards">
+      <div class="card-wrap left rise" style="--rd:2.5s">
+        <div class="card" aria-label="Gatherings hosted on Kanpai"><div class="frame"><img src="assets/e3.jpg" alt="A book club reading together on the floor"><div class="meta"><span class="t">Book club</span><span class="w">Sundays · the Mission</span><span class="chips"><span class="chip">Host</span><span class="chip butter">Open to sponsors</span></span></div></div><div class="frame"><img src="assets/e5.jpg" alt="Two runners at a run club"><div class="meta"><span class="t">Run club</span><span class="w">Wednesdays · Golden Gate Park</span><span class="chips"><span class="chip">Host</span><span class="chip butter">Open to sponsors</span></span></div></div><div class="frame"><img src="assets/e2.jpg" alt="People reading together"><div class="meta"><span class="t">Reading room</span><span class="w">Monthly · Hayes Valley</span><span class="chips"><span class="chip">Host</span><span class="chip butter">Open to sponsors</span></span></div></div></div>
+        <img class="deco cd cd-m spin" src="assets/cd.png" alt="" aria-hidden="true">
+      </div>
+      <div class="card-wrap right rise" style="--rd:2.65s"><img class="deco cd cd-d spin" src="assets/cd.png" alt="" aria-hidden="true"><div class="card" aria-hidden="true"><div class="frame"><img src="assets/e1.jpg" alt=""><div class="meta"><span class="t">Hack night</span><span class="w">Thursdays · SoMa</span><span class="chips"><span class="chip">Host</span><span class="chip butter">Open to sponsors</span></span></div></div><div class="frame"><img src="assets/e4.jpg" alt=""><div class="meta"><span class="t">After-party</span><span class="w">Fridays · Lower Haight</span><span class="chips"><span class="chip">Host</span><span class="chip butter">Open to sponsors</span></span></div></div><div class="frame"><img src="assets/e3.jpg" alt=""><div class="meta"><span class="t">Book club</span><span class="w">Saturdays · Noe Valley</span><span class="chips"><span class="chip">Host</span><span class="chip butter">Open to sponsors</span></span></div></div></div></div>
+    </div>
+    <img class="deco book rise" style="--rd:2.7s" src="assets/book.png" alt="" aria-hidden="true">
+    <svg class="sparkle tw" style="--s:24px;left:372px;top:462px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg>
+  </div>
+</section>
 
-    <section style="order: 1; padding: clamp(44px, 7vw, 88px) clamp(20px, 5vw, 56px) clamp(44px, 7vw, 88px) clamp(20px, 5vw, 40px); display: flex; flex-direction: column; gap: 28px; flex: 1 1 440px; box-sizing: border-box; max-width: 780px;">
-      <div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #1E3A2B; border: 1px solid rgba(30,58,43,0.3); border-radius: 999px; padding: 6px 12px;">Taking the first SF cohort now</div>
+<div class="ticker" aria-hidden="true"><div class="track"><span>Supper clubs<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Salons<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Run clubs<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Hack nights<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Book clubs<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Game nights<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Dinner parties<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Demo nights<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Reading rooms<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>After-parties<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Supper clubs<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Salons<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Run clubs<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Hack nights<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Book clubs<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Game nights<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Dinner parties<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Demo nights<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>Reading rooms<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span><span>After-parties<svg class="sparkle" style="--s:14px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg></span></div></div>
 
-      <sc-if value="{{ isHost }}" hint-placeholder-val="{{ true }}">
-        <div style="display: flex; flex-direction: column; gap: 28px;">
-          <h1 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: clamp(36px, 6.4vw, 62px); line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; min-height: 2.1em;">Your {{ rotatingWord }} has a sponsor.</h1>
-          <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: clamp(17px, 2.1vw, 20px); line-height: 1.55; color: #3D4238; max-width: 30em; text-wrap: pretty;">Kanpai is a platform for community stewards of book clubs, salons, game nights, hackathons and meetups of all sorts to find sponsors. Focus on building your community.</p>
+<section class="mission" id="why">
+  <div class="wrap grid">
+    <div class="text">
+      <span class="eyebrow">Why Kanpai</span>
+      <h2>We’ve never been more connected, or more alone.</h2>
+      <p>About half of U.S. adults say they’ve felt lonely, and in 2020 Americans spent around 20 minutes a day with friends in person, down from an hour two decades earlier (U.S. Surgeon General, 2023). The fix isn’t another feed. It’s a room, a table and someone who bothered to host. Hosts carry those nights mostly out of their own pockets. Kanpai makes it easy for the brands and people who care to keep them going.</p>
+    </div>
+    <div class="photo">
+      <img class="main" src="assets/e4.jpg" alt="Friends laughing over drinks at a bar night" loading="lazy">
+      <img class="glass sway" src="assets/glass.png" alt="" aria-hidden="true" loading="lazy">
+      <span class="chip butter">Kanpai means cheers</span>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="head-row">
+      <div class="stack"><span class="eyebrow">How it works</span><h2>One platform, two ways in</h2></div>
+      <span class="chip">Beta: the first SF cohort is onboarding now</span>
+    </div>
+    <div class="steps">
+      <div class="stack"><h3>If you host</h3><div class="step"><span class="n" style="color:#ffe7a3">1</span><div><b>Apply with your community</b><p>Tell us what you host, how often and who comes. Every host is reviewed.</p></div></div><div class="step"><span class="n" style="color:#ffe7a3">2</span><div><b>Get listed</b><p>Once approved, your gathering shows up for sponsors looking for rooms like yours.</p></div></div><div class="step"><span class="n" style="color:#ffe7a3">3</span><div><b>Get backed</b><p>Accept the offers that fit: money, space, food, drink or product.</p></div></div></div>
+      <div class="stack"><h3>If you sponsor</h3><div class="step"><span class="n" style="color:#c9a7ff">1</span><div><b>Apply as a founding sponsor</b><p>Tell us who you want to reach and where.</p></div></div><div class="step"><span class="n" style="color:#c9a7ff">2</span><div><b>Browse vetted gatherings</b><p>Filter by city, size and kind of crowd. Every host is real and reviewed.</p></div></div><div class="step"><span class="n" style="color:#c9a7ff">3</span><div><b>Back the ones you love</b><p>Choose what you give, and show up in rooms people actually want to be in.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sponsors" id="sponsors">
+  <div class="lead">
+    <span class="eyebrow">For sponsors · founding cohort</span>
+    <h2>Sponsor the nights people remember.</h2>
+    <p>Kanpai is a curated network of San Francisco’s supper clubs, salons, run clubs and hack nights. Sponsors get a real seat at the table, not another impression in a feed.</p>
+  </div>
+  <div class="why"><div><svg class="sparkle" style="--s:16px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#c9a7ff"/></svg><b>Real rooms, not feeds</b><p>Put your brand in front of people who are present, curious and talking to each other.</p></div><div><svg class="sparkle" style="--s:16px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#c9a7ff"/></svg><b>Vetted hosts</b><p>We review every host and their past events before they're listed.</p></div><div><svg class="sparkle" style="--s:16px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#c9a7ff"/></svg><b>Founding sponsor perks</b><p>Early sponsors get first pick of SF's best gatherings, a founding badge and a say in what we build.</p></div><div><svg class="sparkle" style="--s:16px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#c9a7ff"/></svg><b>Fund the cure for loneliness</b><p>Every sponsorship keeps a table, a run or a reading room going.</p></div></div>
+  <div class="cta-row">
+    <button class="btn primary" type="button" data-open="sponsor">Become a founding sponsor</button>
+    <span class="fine">Takes 2 minutes. No commitment.</span>
+  </div>
+  <img class="phone sway" src="assets/phone.png" alt="" aria-hidden="true" loading="lazy">
+</section>
+
+<section class="final">
+  <img class="cd spin" src="assets/cd.png" alt="" aria-hidden="true" loading="lazy">
+  <h2>Pull up a chair.</h2>
+  <p>Join the beta as a host or a sponsor. San Francisco first, with more cities soon.</p>
+  <div class="ctas">
+    <button class="btn primary" type="button" data-open="sponsor">Become a sponsor</button>
+    <button class="btn ghost" type="button" data-open="host">Apply to host</button>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="l"><svg class="kmark" aria-hidden="true" viewBox="0 0 26 24"><g fill="url(#pearl)" transform="rotate(-4 12 12)"><circle cx="0.47" cy="0.44" r="0.47"/><circle cx="1.42" cy="0.51" r="0.44"/><circle cx="2.42" cy="0.50" r="0.41"/><circle cx="3.49" cy="0.42" r="0.41"/><circle cx="4.49" cy="0.56" r="0.42"/><circle cx="5.45" cy="0.52" r="0.49"/><circle cx="6.51" cy="0.48" r="0.50"/><circle cx="7.42" cy="0.56" r="0.43"/><circle cx="8.44" cy="0.43" r="0.43"/><circle cx="9.56" cy="0.44" r="0.46"/><circle cx="13.53" cy="0.48" r="0.46"/><circle cx="14.42" cy="0.42" r="0.42"/><circle cx="15.53" cy="0.49" r="0.43"/><circle cx="16.52" cy="0.49" r="0.43"/><circle cx="17.55" cy="0.54" r="0.43"/><circle cx="18.51" cy="0.50" r="0.49"/><circle cx="19.54" cy="0.46" r="0.50"/><circle cx="20.43" cy="0.49" r="0.48"/><circle cx="21.44" cy="0.50" r="0.41"/><circle cx="22.53" cy="0.55" r="0.46"/><circle cx="0.57" cy="1.47" r="0.47"/><circle cx="1.52" cy="1.51" r="0.45"/><circle cx="2.56" cy="1.58" r="0.45"/><circle cx="3.53" cy="1.42" r="0.47"/><circle cx="4.53" cy="1.59" r="0.48"/><circle cx="5.46" cy="1.48" r="0.47"/><circle cx="6.41" cy="1.49" r="0.42"/><circle cx="7.43" cy="1.42" r="0.48"/><circle cx="8.43" cy="1.45" r="0.44"/><circle cx="9.57" cy="1.42" r="0.45"/><circle cx="13.51" cy="1.57" r="0.48"/><circle cx="14.57" cy="1.46" r="0.44"/><circle cx="15.47" cy="1.57" r="0.49"/><circle cx="16.44" cy="1.44" r="0.43"/><circle cx="17.45" cy="1.50" r="0.46"/><circle cx="18.46" cy="1.41" r="0.44"/><circle cx="19.48" cy="1.51" r="0.49"/><circle cx="20.53" cy="1.50" r="0.46"/><circle cx="21.53" cy="1.42" r="0.49"/><circle cx="22.55" cy="1.57" r="0.48"/><circle cx="1.48" cy="2.48" r="0.41"/><circle cx="2.52" cy="2.42" r="0.41"/><circle cx="3.45" cy="2.44" r="0.44"/><circle cx="4.42" cy="2.41" r="0.42"/><circle cx="5.43" cy="2.48" r="0.41"/><circle cx="6.57" cy="2.52" r="0.42"/><circle cx="7.46" cy="2.47" r="0.44"/><circle cx="8.43" cy="2.56" r="0.50"/><circle cx="15.49" cy="2.50" r="0.41"/><circle cx="16.43" cy="2.47" r="0.43"/><circle cx="17.56" cy="2.44" r="0.41"/><circle cx="18.58" cy="2.51" r="0.42"/><circle cx="19.51" cy="2.41" r="0.45"/><circle cx="3.59" cy="3.57" r="0.47"/><circle cx="4.46" cy="3.48" r="0.42"/><circle cx="5.55" cy="3.51" r="0.48"/><circle cx="6.47" cy="3.45" r="0.48"/><circle cx="17.59" cy="3.56" r="0.48"/><circle cx="18.56" cy="3.54" r="0.43"/><circle cx="3.50" cy="4.47" r="0.41"/><circle cx="4.42" cy="4.46" r="0.43"/><circle cx="5.53" cy="4.58" r="0.45"/><circle cx="6.58" cy="4.59" r="0.49"/><circle cx="16.48" cy="4.45" r="0.43"/><circle cx="17.45" cy="4.45" r="0.46"/><circle cx="18.57" cy="4.56" r="0.45"/><circle cx="3.53" cy="5.55" r="0.41"/><circle cx="4.53" cy="5.57" r="0.48"/><circle cx="5.55" cy="5.50" r="0.42"/><circle cx="6.55" cy="5.47" r="0.48"/><circle cx="15.58" cy="5.48" r="0.44"/><circle cx="16.58" cy="5.54" r="0.42"/><circle cx="17.43" cy="5.44" r="0.49"/><circle cx="3.56" cy="6.44" r="0.48"/><circle cx="4.59" cy="6.53" r="0.44"/><circle cx="5.51" cy="6.43" r="0.41"/><circle cx="6.58" cy="6.53" r="0.45"/><circle cx="14.58" cy="6.49" r="0.49"/><circle cx="15.56" cy="6.45" r="0.43"/><circle cx="16.46" cy="6.45" r="0.46"/><circle cx="3.46" cy="7.49" r="0.42"/><circle cx="4.57" cy="7.47" r="0.45"/><circle cx="5.52" cy="7.57" r="0.44"/><circle cx="6.58" cy="7.50" r="0.45"/><circle cx="13.50" cy="7.41" r="0.45"/><circle cx="14.44" cy="7.41" r="0.48"/><circle cx="15.44" cy="7.50" r="0.47"/><circle cx="3.51" cy="8.47" r="0.45"/><circle cx="4.51" cy="8.55" r="0.41"/><circle cx="5.51" cy="8.45" r="0.43"/><circle cx="6.55" cy="8.50" r="0.46"/><circle cx="12.55" cy="8.57" r="0.45"/><circle cx="13.52" cy="8.50" r="0.45"/><circle cx="14.53" cy="8.49" r="0.45"/><circle cx="3.50" cy="9.58" r="0.47"/><circle cx="4.57" cy="9.58" r="0.43"/><circle cx="5.51" cy="9.58" r="0.48"/><circle cx="6.43" cy="9.43" r="0.45"/><circle cx="11.42" cy="9.45" r="0.41"/><circle cx="12.53" cy="9.55" r="0.49"/><circle cx="13.44" cy="9.54" r="0.47"/><circle cx="3.44" cy="10.57" r="0.50"/><circle cx="4.45" cy="10.58" r="0.44"/><circle cx="5.50" cy="10.59" r="0.48"/><circle cx="6.44" cy="10.49" r="0.45"/><circle cx="9.47" cy="10.45" r="0.43"/><circle cx="10.54" cy="10.41" r="0.46"/><circle cx="11.49" cy="10.41" r="0.44"/><circle cx="12.52" cy="10.50" r="0.41"/><circle cx="3.59" cy="11.55" r="0.50"/><circle cx="4.43" cy="11.46" r="0.41"/><circle cx="5.55" cy="11.46" r="0.42"/><circle cx="6.49" cy="11.57" r="0.48"/><circle cx="9.46" cy="11.44" r="0.49"/><circle cx="10.51" cy="11.54" r="0.41"/><circle cx="11.42" cy="11.53" r="0.44"/><circle cx="12.42" cy="11.58" r="0.46"/><circle cx="13.55" cy="11.43" r="0.48"/><circle cx="3.42" cy="12.57" r="0.45"/><circle cx="4.47" cy="12.51" r="0.49"/><circle cx="5.46" cy="12.43" r="0.45"/><circle cx="6.45" cy="12.43" r="0.42"/><circle cx="8.42" cy="12.45" r="0.43"/><circle cx="9.46" cy="12.55" r="0.43"/><circle cx="10.50" cy="12.44" r="0.44"/><circle cx="11.41" cy="12.46" r="0.41"/><circle cx="12.54" cy="12.51" r="0.42"/><circle cx="13.50" cy="12.58" r="0.41"/><circle cx="14.56" cy="12.49" r="0.45"/><circle cx="3.56" cy="13.48" r="0.45"/><circle cx="4.53" cy="13.59" r="0.44"/><circle cx="5.56" cy="13.54" r="0.46"/><circle cx="6.48" cy="13.47" r="0.41"/><circle cx="7.43" cy="13.42" r="0.47"/><circle cx="8.46" cy="13.44" r="0.41"/><circle cx="9.56" cy="13.57" r="0.47"/><circle cx="11.46" cy="13.45" r="0.43"/><circle cx="12.49" cy="13.44" r="0.45"/><circle cx="13.46" cy="13.58" r="0.50"/><circle cx="14.51" cy="13.45" r="0.49"/><circle cx="3.47" cy="14.47" r="0.40"/><circle cx="4.48" cy="14.50" r="0.45"/><circle cx="5.45" cy="14.50" r="0.40"/><circle cx="6.46" cy="14.43" r="0.44"/><circle cx="7.42" cy="14.41" r="0.43"/><circle cx="8.45" cy="14.52" r="0.45"/><circle cx="11.55" cy="14.53" r="0.47"/><circle cx="12.57" cy="14.48" r="0.43"/><circle cx="13.59" cy="14.44" r="0.47"/><circle cx="14.53" cy="14.42" r="0.48"/><circle cx="15.57" cy="14.52" r="0.47"/><circle cx="3.56" cy="15.44" r="0.45"/><circle cx="4.50" cy="15.56" r="0.48"/><circle cx="5.56" cy="15.52" r="0.49"/><circle cx="6.53" cy="15.53" r="0.43"/><circle cx="12.42" cy="15.43" r="0.44"/><circle cx="13.43" cy="15.56" r="0.46"/><circle cx="14.52" cy="15.52" r="0.47"/><circle cx="15.50" cy="15.41" r="0.48"/><circle cx="16.54" cy="15.50" r="0.45"/><circle cx="3.53" cy="16.42" r="0.47"/><circle cx="4.46" cy="16.42" r="0.43"/><circle cx="5.54" cy="16.45" r="0.47"/><circle cx="6.59" cy="16.50" r="0.44"/><circle cx="13.50" cy="16.53" r="0.48"/><circle cx="14.52" cy="16.53" r="0.41"/><circle cx="15.44" cy="16.46" r="0.47"/><circle cx="16.46" cy="16.51" r="0.41"/><circle cx="17.42" cy="16.46" r="0.47"/><circle cx="3.53" cy="17.53" r="0.43"/><circle cx="4.50" cy="17.49" r="0.45"/><circle cx="5.43" cy="17.57" r="0.42"/><circle cx="6.59" cy="17.58" r="0.41"/><circle cx="14.49" cy="17.56" r="0.50"/><circle cx="15.49" cy="17.46" r="0.42"/><circle cx="16.58" cy="17.45" r="0.46"/><circle cx="17.44" cy="17.50" r="0.49"/><circle cx="18.43" cy="17.56" r="0.45"/><circle cx="3.57" cy="18.54" r="0.43"/><circle cx="4.57" cy="18.50" r="0.41"/><circle cx="5.41" cy="18.50" r="0.45"/><circle cx="6.46" cy="18.44" r="0.44"/><circle cx="15.47" cy="18.56" r="0.40"/><circle cx="16.55" cy="18.56" r="0.42"/><circle cx="17.58" cy="18.54" r="0.49"/><circle cx="18.46" cy="18.48" r="0.44"/><circle cx="3.59" cy="19.52" r="0.44"/><circle cx="4.49" cy="19.46" r="0.41"/><circle cx="5.43" cy="19.56" r="0.43"/><circle cx="6.58" cy="19.45" r="0.43"/><circle cx="15.50" cy="19.44" r="0.44"/><circle cx="16.58" cy="19.57" r="0.48"/><circle cx="17.52" cy="19.57" r="0.49"/><circle cx="18.51" cy="19.54" r="0.41"/><circle cx="19.54" cy="19.49" r="0.47"/><circle cx="3.53" cy="20.46" r="0.41"/><circle cx="4.58" cy="20.43" r="0.45"/><circle cx="5.47" cy="20.46" r="0.47"/><circle cx="6.59" cy="20.46" r="0.47"/><circle cx="16.46" cy="20.51" r="0.44"/><circle cx="17.44" cy="20.44" r="0.42"/><circle cx="18.57" cy="20.50" r="0.42"/><circle cx="19.57" cy="20.59" r="0.45"/><circle cx="20.44" cy="20.44" r="0.41"/><circle cx="1.47" cy="21.43" r="0.43"/><circle cx="2.46" cy="21.51" r="0.49"/><circle cx="3.54" cy="21.48" r="0.44"/><circle cx="4.50" cy="21.48" r="0.44"/><circle cx="5.42" cy="21.46" r="0.50"/><circle cx="6.43" cy="21.50" r="0.46"/><circle cx="7.57" cy="21.45" r="0.43"/><circle cx="8.45" cy="21.48" r="0.45"/><circle cx="15.58" cy="21.56" r="0.49"/><circle cx="16.41" cy="21.42" r="0.47"/><circle cx="17.57" cy="21.50" r="0.46"/><circle cx="18.41" cy="21.48" r="0.49"/><circle cx="19.56" cy="21.56" r="0.50"/><circle cx="20.45" cy="21.43" r="0.42"/><circle cx="21.50" cy="21.53" r="0.49"/><circle cx="0.54" cy="22.53" r="0.48"/><circle cx="1.49" cy="22.51" r="0.41"/><circle cx="2.55" cy="22.45" r="0.49"/><circle cx="3.53" cy="22.46" r="0.42"/><circle cx="4.46" cy="22.52" r="0.47"/><circle cx="5.43" cy="22.42" r="0.45"/><circle cx="6.51" cy="22.48" r="0.43"/><circle cx="7.52" cy="22.41" r="0.43"/><circle cx="8.49" cy="22.58" r="0.46"/><circle cx="9.57" cy="22.50" r="0.43"/><circle cx="13.45" cy="22.58" r="0.47"/><circle cx="14.47" cy="22.41" r="0.45"/><circle cx="15.53" cy="22.49" r="0.43"/><circle cx="16.53" cy="22.58" r="0.43"/><circle cx="17.42" cy="22.47" r="0.44"/><circle cx="18.53" cy="22.45" r="0.48"/><circle cx="19.54" cy="22.50" r="0.42"/><circle cx="20.58" cy="22.47" r="0.48"/><circle cx="21.45" cy="22.45" r="0.48"/><circle cx="22.46" cy="22.58" r="0.45"/><circle cx="23.44" cy="22.45" r="0.44"/><circle cx="0.53" cy="23.58" r="0.42"/><circle cx="1.48" cy="23.45" r="0.50"/><circle cx="2.44" cy="23.42" r="0.41"/><circle cx="3.48" cy="23.57" r="0.49"/><circle cx="4.54" cy="23.59" r="0.49"/><circle cx="5.47" cy="23.44" r="0.49"/><circle cx="6.54" cy="23.42" r="0.47"/><circle cx="7.48" cy="23.48" r="0.44"/><circle cx="8.44" cy="23.41" r="0.43"/><circle cx="9.47" cy="23.58" r="0.42"/><circle cx="13.58" cy="23.45" r="0.44"/><circle cx="14.56" cy="23.56" r="0.44"/><circle cx="15.42" cy="23.50" r="0.44"/><circle cx="16.58" cy="23.44" r="0.44"/><circle cx="17.57" cy="23.42" r="0.44"/><circle cx="18.56" cy="23.55" r="0.41"/><circle cx="19.42" cy="23.42" r="0.49"/><circle cx="20.46" cy="23.54" r="0.49"/><circle cx="21.47" cy="23.46" r="0.49"/><circle cx="22.52" cy="23.46" r="0.47"/><circle cx="23.47" cy="23.46" r="0.40"/><circle cx="24.00" cy="3.00" r=".34"/><circle cx="24.00" cy="7.00" r=".34"/><circle cx="22.00" cy="5.00" r=".34"/><circle cx="26.00" cy="5.00" r=".34"/><circle cx="22.50" cy="3.50" r=".34"/><circle cx="25.50" cy="3.50" r=".34"/><circle cx="22.50" cy="6.50" r=".34"/><circle cx="25.50" cy="6.50" r=".34"/><circle cx="24" cy="5" r=".55"/></g></svg><span>San Francisco first. More cities soon.</span></div>
+  <a href="mailto:hi@kanpai.events">hi@kanpai.events</a>
+</footer>
+
+<dialog id="join" aria-labelledby="join-title">
+  <div class="sheet">
+    <div class="top"><svg class="kmark" aria-hidden="true" viewBox="0 0 26 24"><g fill="url(#pearl)" transform="rotate(-4 12 12)"><circle cx="0.47" cy="0.44" r="0.47"/><circle cx="1.42" cy="0.51" r="0.44"/><circle cx="2.42" cy="0.50" r="0.41"/><circle cx="3.49" cy="0.42" r="0.41"/><circle cx="4.49" cy="0.56" r="0.42"/><circle cx="5.45" cy="0.52" r="0.49"/><circle cx="6.51" cy="0.48" r="0.50"/><circle cx="7.42" cy="0.56" r="0.43"/><circle cx="8.44" cy="0.43" r="0.43"/><circle cx="9.56" cy="0.44" r="0.46"/><circle cx="13.53" cy="0.48" r="0.46"/><circle cx="14.42" cy="0.42" r="0.42"/><circle cx="15.53" cy="0.49" r="0.43"/><circle cx="16.52" cy="0.49" r="0.43"/><circle cx="17.55" cy="0.54" r="0.43"/><circle cx="18.51" cy="0.50" r="0.49"/><circle cx="19.54" cy="0.46" r="0.50"/><circle cx="20.43" cy="0.49" r="0.48"/><circle cx="21.44" cy="0.50" r="0.41"/><circle cx="22.53" cy="0.55" r="0.46"/><circle cx="0.57" cy="1.47" r="0.47"/><circle cx="1.52" cy="1.51" r="0.45"/><circle cx="2.56" cy="1.58" r="0.45"/><circle cx="3.53" cy="1.42" r="0.47"/><circle cx="4.53" cy="1.59" r="0.48"/><circle cx="5.46" cy="1.48" r="0.47"/><circle cx="6.41" cy="1.49" r="0.42"/><circle cx="7.43" cy="1.42" r="0.48"/><circle cx="8.43" cy="1.45" r="0.44"/><circle cx="9.57" cy="1.42" r="0.45"/><circle cx="13.51" cy="1.57" r="0.48"/><circle cx="14.57" cy="1.46" r="0.44"/><circle cx="15.47" cy="1.57" r="0.49"/><circle cx="16.44" cy="1.44" r="0.43"/><circle cx="17.45" cy="1.50" r="0.46"/><circle cx="18.46" cy="1.41" r="0.44"/><circle cx="19.48" cy="1.51" r="0.49"/><circle cx="20.53" cy="1.50" r="0.46"/><circle cx="21.53" cy="1.42" r="0.49"/><circle cx="22.55" cy="1.57" r="0.48"/><circle cx="1.48" cy="2.48" r="0.41"/><circle cx="2.52" cy="2.42" r="0.41"/><circle cx="3.45" cy="2.44" r="0.44"/><circle cx="4.42" cy="2.41" r="0.42"/><circle cx="5.43" cy="2.48" r="0.41"/><circle cx="6.57" cy="2.52" r="0.42"/><circle cx="7.46" cy="2.47" r="0.44"/><circle cx="8.43" cy="2.56" r="0.50"/><circle cx="15.49" cy="2.50" r="0.41"/><circle cx="16.43" cy="2.47" r="0.43"/><circle cx="17.56" cy="2.44" r="0.41"/><circle cx="18.58" cy="2.51" r="0.42"/><circle cx="19.51" cy="2.41" r="0.45"/><circle cx="3.59" cy="3.57" r="0.47"/><circle cx="4.46" cy="3.48" r="0.42"/><circle cx="5.55" cy="3.51" r="0.48"/><circle cx="6.47" cy="3.45" r="0.48"/><circle cx="17.59" cy="3.56" r="0.48"/><circle cx="18.56" cy="3.54" r="0.43"/><circle cx="3.50" cy="4.47" r="0.41"/><circle cx="4.42" cy="4.46" r="0.43"/><circle cx="5.53" cy="4.58" r="0.45"/><circle cx="6.58" cy="4.59" r="0.49"/><circle cx="16.48" cy="4.45" r="0.43"/><circle cx="17.45" cy="4.45" r="0.46"/><circle cx="18.57" cy="4.56" r="0.45"/><circle cx="3.53" cy="5.55" r="0.41"/><circle cx="4.53" cy="5.57" r="0.48"/><circle cx="5.55" cy="5.50" r="0.42"/><circle cx="6.55" cy="5.47" r="0.48"/><circle cx="15.58" cy="5.48" r="0.44"/><circle cx="16.58" cy="5.54" r="0.42"/><circle cx="17.43" cy="5.44" r="0.49"/><circle cx="3.56" cy="6.44" r="0.48"/><circle cx="4.59" cy="6.53" r="0.44"/><circle cx="5.51" cy="6.43" r="0.41"/><circle cx="6.58" cy="6.53" r="0.45"/><circle cx="14.58" cy="6.49" r="0.49"/><circle cx="15.56" cy="6.45" r="0.43"/><circle cx="16.46" cy="6.45" r="0.46"/><circle cx="3.46" cy="7.49" r="0.42"/><circle cx="4.57" cy="7.47" r="0.45"/><circle cx="5.52" cy="7.57" r="0.44"/><circle cx="6.58" cy="7.50" r="0.45"/><circle cx="13.50" cy="7.41" r="0.45"/><circle cx="14.44" cy="7.41" r="0.48"/><circle cx="15.44" cy="7.50" r="0.47"/><circle cx="3.51" cy="8.47" r="0.45"/><circle cx="4.51" cy="8.55" r="0.41"/><circle cx="5.51" cy="8.45" r="0.43"/><circle cx="6.55" cy="8.50" r="0.46"/><circle cx="12.55" cy="8.57" r="0.45"/><circle cx="13.52" cy="8.50" r="0.45"/><circle cx="14.53" cy="8.49" r="0.45"/><circle cx="3.50" cy="9.58" r="0.47"/><circle cx="4.57" cy="9.58" r="0.43"/><circle cx="5.51" cy="9.58" r="0.48"/><circle cx="6.43" cy="9.43" r="0.45"/><circle cx="11.42" cy="9.45" r="0.41"/><circle cx="12.53" cy="9.55" r="0.49"/><circle cx="13.44" cy="9.54" r="0.47"/><circle cx="3.44" cy="10.57" r="0.50"/><circle cx="4.45" cy="10.58" r="0.44"/><circle cx="5.50" cy="10.59" r="0.48"/><circle cx="6.44" cy="10.49" r="0.45"/><circle cx="9.47" cy="10.45" r="0.43"/><circle cx="10.54" cy="10.41" r="0.46"/><circle cx="11.49" cy="10.41" r="0.44"/><circle cx="12.52" cy="10.50" r="0.41"/><circle cx="3.59" cy="11.55" r="0.50"/><circle cx="4.43" cy="11.46" r="0.41"/><circle cx="5.55" cy="11.46" r="0.42"/><circle cx="6.49" cy="11.57" r="0.48"/><circle cx="9.46" cy="11.44" r="0.49"/><circle cx="10.51" cy="11.54" r="0.41"/><circle cx="11.42" cy="11.53" r="0.44"/><circle cx="12.42" cy="11.58" r="0.46"/><circle cx="13.55" cy="11.43" r="0.48"/><circle cx="3.42" cy="12.57" r="0.45"/><circle cx="4.47" cy="12.51" r="0.49"/><circle cx="5.46" cy="12.43" r="0.45"/><circle cx="6.45" cy="12.43" r="0.42"/><circle cx="8.42" cy="12.45" r="0.43"/><circle cx="9.46" cy="12.55" r="0.43"/><circle cx="10.50" cy="12.44" r="0.44"/><circle cx="11.41" cy="12.46" r="0.41"/><circle cx="12.54" cy="12.51" r="0.42"/><circle cx="13.50" cy="12.58" r="0.41"/><circle cx="14.56" cy="12.49" r="0.45"/><circle cx="3.56" cy="13.48" r="0.45"/><circle cx="4.53" cy="13.59" r="0.44"/><circle cx="5.56" cy="13.54" r="0.46"/><circle cx="6.48" cy="13.47" r="0.41"/><circle cx="7.43" cy="13.42" r="0.47"/><circle cx="8.46" cy="13.44" r="0.41"/><circle cx="9.56" cy="13.57" r="0.47"/><circle cx="11.46" cy="13.45" r="0.43"/><circle cx="12.49" cy="13.44" r="0.45"/><circle cx="13.46" cy="13.58" r="0.50"/><circle cx="14.51" cy="13.45" r="0.49"/><circle cx="3.47" cy="14.47" r="0.40"/><circle cx="4.48" cy="14.50" r="0.45"/><circle cx="5.45" cy="14.50" r="0.40"/><circle cx="6.46" cy="14.43" r="0.44"/><circle cx="7.42" cy="14.41" r="0.43"/><circle cx="8.45" cy="14.52" r="0.45"/><circle cx="11.55" cy="14.53" r="0.47"/><circle cx="12.57" cy="14.48" r="0.43"/><circle cx="13.59" cy="14.44" r="0.47"/><circle cx="14.53" cy="14.42" r="0.48"/><circle cx="15.57" cy="14.52" r="0.47"/><circle cx="3.56" cy="15.44" r="0.45"/><circle cx="4.50" cy="15.56" r="0.48"/><circle cx="5.56" cy="15.52" r="0.49"/><circle cx="6.53" cy="15.53" r="0.43"/><circle cx="12.42" cy="15.43" r="0.44"/><circle cx="13.43" cy="15.56" r="0.46"/><circle cx="14.52" cy="15.52" r="0.47"/><circle cx="15.50" cy="15.41" r="0.48"/><circle cx="16.54" cy="15.50" r="0.45"/><circle cx="3.53" cy="16.42" r="0.47"/><circle cx="4.46" cy="16.42" r="0.43"/><circle cx="5.54" cy="16.45" r="0.47"/><circle cx="6.59" cy="16.50" r="0.44"/><circle cx="13.50" cy="16.53" r="0.48"/><circle cx="14.52" cy="16.53" r="0.41"/><circle cx="15.44" cy="16.46" r="0.47"/><circle cx="16.46" cy="16.51" r="0.41"/><circle cx="17.42" cy="16.46" r="0.47"/><circle cx="3.53" cy="17.53" r="0.43"/><circle cx="4.50" cy="17.49" r="0.45"/><circle cx="5.43" cy="17.57" r="0.42"/><circle cx="6.59" cy="17.58" r="0.41"/><circle cx="14.49" cy="17.56" r="0.50"/><circle cx="15.49" cy="17.46" r="0.42"/><circle cx="16.58" cy="17.45" r="0.46"/><circle cx="17.44" cy="17.50" r="0.49"/><circle cx="18.43" cy="17.56" r="0.45"/><circle cx="3.57" cy="18.54" r="0.43"/><circle cx="4.57" cy="18.50" r="0.41"/><circle cx="5.41" cy="18.50" r="0.45"/><circle cx="6.46" cy="18.44" r="0.44"/><circle cx="15.47" cy="18.56" r="0.40"/><circle cx="16.55" cy="18.56" r="0.42"/><circle cx="17.58" cy="18.54" r="0.49"/><circle cx="18.46" cy="18.48" r="0.44"/><circle cx="3.59" cy="19.52" r="0.44"/><circle cx="4.49" cy="19.46" r="0.41"/><circle cx="5.43" cy="19.56" r="0.43"/><circle cx="6.58" cy="19.45" r="0.43"/><circle cx="15.50" cy="19.44" r="0.44"/><circle cx="16.58" cy="19.57" r="0.48"/><circle cx="17.52" cy="19.57" r="0.49"/><circle cx="18.51" cy="19.54" r="0.41"/><circle cx="19.54" cy="19.49" r="0.47"/><circle cx="3.53" cy="20.46" r="0.41"/><circle cx="4.58" cy="20.43" r="0.45"/><circle cx="5.47" cy="20.46" r="0.47"/><circle cx="6.59" cy="20.46" r="0.47"/><circle cx="16.46" cy="20.51" r="0.44"/><circle cx="17.44" cy="20.44" r="0.42"/><circle cx="18.57" cy="20.50" r="0.42"/><circle cx="19.57" cy="20.59" r="0.45"/><circle cx="20.44" cy="20.44" r="0.41"/><circle cx="1.47" cy="21.43" r="0.43"/><circle cx="2.46" cy="21.51" r="0.49"/><circle cx="3.54" cy="21.48" r="0.44"/><circle cx="4.50" cy="21.48" r="0.44"/><circle cx="5.42" cy="21.46" r="0.50"/><circle cx="6.43" cy="21.50" r="0.46"/><circle cx="7.57" cy="21.45" r="0.43"/><circle cx="8.45" cy="21.48" r="0.45"/><circle cx="15.58" cy="21.56" r="0.49"/><circle cx="16.41" cy="21.42" r="0.47"/><circle cx="17.57" cy="21.50" r="0.46"/><circle cx="18.41" cy="21.48" r="0.49"/><circle cx="19.56" cy="21.56" r="0.50"/><circle cx="20.45" cy="21.43" r="0.42"/><circle cx="21.50" cy="21.53" r="0.49"/><circle cx="0.54" cy="22.53" r="0.48"/><circle cx="1.49" cy="22.51" r="0.41"/><circle cx="2.55" cy="22.45" r="0.49"/><circle cx="3.53" cy="22.46" r="0.42"/><circle cx="4.46" cy="22.52" r="0.47"/><circle cx="5.43" cy="22.42" r="0.45"/><circle cx="6.51" cy="22.48" r="0.43"/><circle cx="7.52" cy="22.41" r="0.43"/><circle cx="8.49" cy="22.58" r="0.46"/><circle cx="9.57" cy="22.50" r="0.43"/><circle cx="13.45" cy="22.58" r="0.47"/><circle cx="14.47" cy="22.41" r="0.45"/><circle cx="15.53" cy="22.49" r="0.43"/><circle cx="16.53" cy="22.58" r="0.43"/><circle cx="17.42" cy="22.47" r="0.44"/><circle cx="18.53" cy="22.45" r="0.48"/><circle cx="19.54" cy="22.50" r="0.42"/><circle cx="20.58" cy="22.47" r="0.48"/><circle cx="21.45" cy="22.45" r="0.48"/><circle cx="22.46" cy="22.58" r="0.45"/><circle cx="23.44" cy="22.45" r="0.44"/><circle cx="0.53" cy="23.58" r="0.42"/><circle cx="1.48" cy="23.45" r="0.50"/><circle cx="2.44" cy="23.42" r="0.41"/><circle cx="3.48" cy="23.57" r="0.49"/><circle cx="4.54" cy="23.59" r="0.49"/><circle cx="5.47" cy="23.44" r="0.49"/><circle cx="6.54" cy="23.42" r="0.47"/><circle cx="7.48" cy="23.48" r="0.44"/><circle cx="8.44" cy="23.41" r="0.43"/><circle cx="9.47" cy="23.58" r="0.42"/><circle cx="13.58" cy="23.45" r="0.44"/><circle cx="14.56" cy="23.56" r="0.44"/><circle cx="15.42" cy="23.50" r="0.44"/><circle cx="16.58" cy="23.44" r="0.44"/><circle cx="17.57" cy="23.42" r="0.44"/><circle cx="18.56" cy="23.55" r="0.41"/><circle cx="19.42" cy="23.42" r="0.49"/><circle cx="20.46" cy="23.54" r="0.49"/><circle cx="21.47" cy="23.46" r="0.49"/><circle cx="22.52" cy="23.46" r="0.47"/><circle cx="23.47" cy="23.46" r="0.40"/><circle cx="24.00" cy="3.00" r=".34"/><circle cx="24.00" cy="7.00" r=".34"/><circle cx="22.00" cy="5.00" r=".34"/><circle cx="26.00" cy="5.00" r=".34"/><circle cx="22.50" cy="3.50" r=".34"/><circle cx="25.50" cy="3.50" r=".34"/><circle cx="22.50" cy="6.50" r=".34"/><circle cx="25.50" cy="6.50" r=".34"/><circle cx="24" cy="5" r=".55"/></g></svg><button class="icon-btn" type="button" data-close aria-label="Close"><svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2l12 12M14 2L2 14"/></svg></button></div>
+
+    <div data-step="choose">
+      <div class="stack" style="gap:18px">
+        <h2 id="join-title">What brings you here?</h2>
+        <div class="picks">
+          <button class="pick" type="button" data-go="host">
+            <img src="assets/e3.jpg" alt="">
+            <span class="body"><span class="chip" style="align-self:flex-start">For hosts</span><span class="ttl">I organize gatherings</span>
+            <p>Salons, supper clubs, run clubs, hack nights. List your gathering for sponsors who can fund the night or cover the space, food or drinks.</p></span>
+          </button>
+          <button class="pick" type="button" data-go="sponsor">
+            <img src="assets/e4.jpg" alt="">
+            <span class="body"><span class="chip" style="align-self:flex-start">For sponsors</span><span class="ttl">I’d like to sponsor</span>
+            <p>Find the rooms your people already go to. Back vetted hosts and be part of the night, not an ad in it.</p></span>
+          </button>
         </div>
-      </sc-if>
+        <span class="fine" style="text-align:center">Hosts are reviewed before they’re listed · Free to join</span>
+      </div>
+    </div>
 
-      <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
-        <div style="display: flex; flex-direction: column; gap: 28px;">
-          <h1 style="margin: 0; font-family: 'Shippori Mincho', serif; font-weight: 400; font-size: clamp(36px, 6.4vw, 62px); line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; min-height: 2.1em;">Back the {{ rotatingWordComma }} not the banner.</h1>
-          <p style="margin: 0; font-family: 'Shippori Mincho', serif; font-size: clamp(17px, 2.1vw, 20px); line-height: 1.55; color: #3D4238; max-width: 30em; text-wrap: pretty;">Kanpai empowers founders, marketing teams and individual patrons to support niche early-adopter communities by sponsoring their events. The people who show up on a Tuesday night are the ones who will care about what you build.</p>
+    <form data-step="host" data-role="host" novalidate hidden>
+      <div class="stack" style="gap:16px">
+        <button class="back" type="button" data-go="choose">← Back</button>
+        <h2>Tell us about your gatherings</h2>
+        <p style="font-size:15px">We review every host and their past events before anyone is listed, so sponsors only ever see real communities.</p>
+        <div class="fields">
+          <label>Name<input name="name" autocomplete="name" placeholder="Your name" required></label>
+          <label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+          <label>Community or event<input name="community" placeholder="e.g. Thursday Salon" required></label>
+          <label>What do you host?<select name="event_type">
+            <option>Salon or supper club</option><option>Run club</option><option>Hack night or demo night</option><option>Book club</option><option>Game night</option><option>Party</option><option>Conference or summit</option><option>Something else</option></select></label>
+          <label>City<input name="city" autocomplete="address-level2" value="San Francisco" required></label>
+          <label>Website or social (optional)<input name="past_events_profile" type="url" placeholder="Past event page, IG, Discord"></label>
         </div>
-      </sc-if>
-
-      <div style="display: flex; align-items: flex-start; gap: 18px; margin: 2px 0 6px;">
-        <img src="e1.jpg" data-kanpai-photo="" alt="People at a Kanpai event" style="width: 168px; max-width: 40%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 14px; transform: rotate(-2.2deg); filter: saturate(0.95); box-shadow: 0 2px 4px rgba(20,24,15,0.12), 0 22px 40px -22px rgba(20,24,15,0.55); transition: transform 320ms cubic-bezier(0.2,0.7,0.2,1);" style-hover="transform: rotate(-1deg) translateY(-5px);" />
-        <img src="e5.jpg" data-kanpai-photo="" alt="People at a Kanpai event" style="width: 132px; max-width: 32%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 14px; margin-top: 34px; transform: rotate(1.8deg); filter: saturate(0.95); box-shadow: 0 2px 4px rgba(20,24,15,0.12), 0 22px 40px -22px rgba(20,24,15,0.55); transition: transform 320ms cubic-bezier(0.2,0.7,0.2,1);" style-hover="transform: rotate(0.6deg) translateY(-5px);" />
+        <div class="form-foot"><span class="err" role="alert"></span><button class="btn primary" type="submit">Join the list</button></div>
+        <span class="fine">No account needed. We email once, when the beta opens.</span>
       </div>
+    </form>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px;">
-        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Book clubs</div>
-        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Salons</div>
-        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Hackathons</div>
-        <div style="font-size: 13px; color: #6B6A5C; border: 1px solid rgba(20,24,15,0.14); border-radius: 4px; padding: 7px 11px;">Game nights</div>
-      </div>
-
-      <div style="display: flex; gap: 14px; align-items: flex-start; background: rgba(195,215,226,0.4); border: 1px solid rgba(30,58,43,0.18); border-radius: 10px; padding: 16px 18px;">
-        <span style="font-family: 'Shippori Mincho', serif; font-size: 14px; color: #1E3A2B; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; padding-top: 1px;">Vetted</span>
-        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #3D4238; max-width: 34em; text-wrap: pretty;">Hosts join by application. We review every host and their past events before an event is hosted so sponsors are only ever looking at real communities.</p>
-      </div>
-
-    </section>
-  </main>
-
-  <section style="border-top: 1px solid rgba(20,24,15,0.12); padding: clamp(48px, 6vw, 80px) clamp(20px, 5vw, 40px) clamp(56px, 7vw, 88px);">
-      <div style="width: 100%; max-width: 940px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; align-items: center;">
-        <h2 style="margin: 0; font-size: clamp(28px, 3.4vw, 40px); font-family: 'Shippori Mincho', serif; letter-spacing: -0.01em; color: #14180F; font-weight: 600; text-align: center;">How it works</h2>
-
-        <div style="width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
-          <img src="e2.jpg" data-kanpai-photo="" alt="A Kanpai room" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; filter: saturate(0.94); box-shadow: 0 1px 2px rgba(20,24,15,0.14), 0 14px 26px -18px rgba(20,24,15,0.5); transition: transform 260ms cubic-bezier(0.2,0.7,0.2,1);" style-hover="transform: translateY(-4px);" />
-          <img src="e3.jpg" data-kanpai-photo="" alt="A Kanpai room" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; filter: saturate(0.94); box-shadow: 0 1px 2px rgba(20,24,15,0.14), 0 14px 26px -18px rgba(20,24,15,0.5); transition: transform 260ms cubic-bezier(0.2,0.7,0.2,1);" style-hover="transform: translateY(-4px);" />
-          <img src="e4.jpg" data-kanpai-photo="" alt="A Kanpai room" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; filter: saturate(0.94); box-shadow: 0 1px 2px rgba(20,24,15,0.14), 0 14px 26px -18px rgba(20,24,15,0.5); transition: transform 260ms cubic-bezier(0.2,0.7,0.2,1);" style-hover="transform: translateY(-4px);" />
+    <form data-step="sponsor" data-role="sponsor" novalidate hidden>
+      <div class="stack" style="gap:16px">
+        <button class="back" type="button" data-go="choose">← Back</button>
+        <h2>Tell us what you’d like to support</h2>
+        <p style="font-size:15px">Founding sponsors get first pick of San Francisco’s best gatherings and help shape what we build.</p>
+        <div class="fields">
+          <label>Name<input name="name" autocomplete="name" placeholder="Your name" required></label>
+          <label>Work email<input name="email" type="email" autocomplete="email" placeholder="you@company.com" required></label>
+          <label>Company or organization<input name="associated_org" autocomplete="organization" placeholder="Leave blank if you're an individual"></label>
+          <label>Communities you’d back<input name="interests" placeholder="AI salons, run clubs, game nights…"></label>
+          <label>Budget per event (optional)<select name="budget"><option>Not sure yet</option><option>Under $500</option><option>$500–2,000</option><option>$2,000–5,000</option><option>$5,000+</option></select></label>
+          <label>Cities<input name="city" value="San Francisco"></label>
         </div>
-
-        <sc-if value="{{ isHost }}" hint-placeholder-val="{{ true }}">
-          <ol style="margin: 0; padding: 0; list-style: none; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px 32px; margin-top: 6px;">
-            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
-              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">01</span>
-              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Describe the room.</strong> Date, headcount, and who actually shows up.</span>
-            </li>
-            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
-              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">02</span>
-              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Sponsors find you.</strong> They browse the rooms and reach out — money, a venue, food, or all three.</span>
-            </li>
-            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
-              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">03</span>
-              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Settled before the event.</strong> Cash through Stripe, or a venue on the calendar.</span>
-            </li>
-          </ol>
-        </sc-if>
-
-        <sc-if value="{{ isStartup }}" hint-placeholder-val="{{ false }}">
-          <ol style="margin: 0; padding: 0; list-style: none; width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px 32px; margin-top: 6px;">
-            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
-              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">01</span>
-              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Browse the rooms.</strong> Upcoming events with the guest mix spelled out, priced.</span>
-            </li>
-            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
-              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">02</span>
-              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Pick your fit.</strong> Agree what you get — a mention, a demo, a seat at the table.</span>
-            </li>
-            <li style="display: grid; grid-template-columns: 28px 1fr; gap: 16px; align-items: start;">
-              <span style="font-family: 'Shippori Mincho', serif; font-size: 15px; color: #1E3A2B; border-bottom: 1px solid rgba(30,58,43,0.3); padding-bottom: 2px;">03</span>
-              <span style="font-size: 15px; line-height: 1.55; color: #3D4238;"><strong style="color: #14180F; font-weight: 700;">Back it and show up.</strong> One click, Stripe handles the rest.</span>
-            </li>
-          </ol>
-        </sc-if>
+        <div class="form-foot"><span class="err" role="alert"></span><button class="btn primary" type="submit">Join the list</button></div>
+        <span class="fine">No account needed. No commitment.</span>
       </div>
-  </section>
+    </form>
 
-  <footer style="display: flex; align-items: center; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; padding: 20px clamp(20px, 5vw, 40px); border-top: 1px solid rgba(20,24,15,0.12); font-size: 12px; color: #6B6A5C;">
-    <div>Kanpai — San Francisco</div>
-    <div>Made by <a href="https://amina-io.com" target="_blank" rel="noopener" style="color: #3D4238;">amina-io.com</a></div>
-  </footer>
-</div>
+    <div data-step="done" hidden>
+      <div class="done">
+        <svg class="sparkle" style="--s:40px" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0c.8 5.6 3.6 8.6 10 10-6.4 1.4-9.2 4.4-10 10-.8-5.6-3.6-8.6-10-10C6.4 8.6 9.2 5.6 10 0z" fill="#ffe7a3"/></svg>
+        <h2>Kanpai! You’re on the list.</h2>
+        <p>We’ll be in touch when the first San Francisco cohort opens.</p>
+        <button class="btn ghost" type="button" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+</dialog>
 
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;defaultRole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;host&quot;,&quot;startup&quot;],&quot;default&quot;:&quot;host&quot;,&quot;tsType&quot;:&quot;'host' | 'startup'&quot;,&quot;section&quot;:&quot;Content&quot;}}">
-class Component extends DCLogic {
-  state = { role: null, name: "", org: "", email: "", city: "sf", eventType: "salon", submitted: false, wordIdx: 0, sending: false, error: "", offer: "cash", hostLink: "" };
+<script>
+(() => {
+  const FORM = "https://formspree.io/f/xppzqvgv";
+  const dlg = document.getElementById("join");
+  const steps = dlg.querySelectorAll("[data-step]");
+  const show = (name) => {
+    steps.forEach(s => s.hidden = s.dataset.step !== name);
+    const first = dlg.querySelector(`[data-step="${name}"] input, [data-step="${name}"] .pick, [data-step="${name}"] .btn`);
+    if (first) setTimeout(() => first.focus(), 30);
+  };
+  document.querySelectorAll("[data-open]").forEach(b => b.addEventListener("click", () => {
+    menu.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false");
+    show(b.dataset.open); if (!dlg.open) dlg.showModal();
+  }));
+  dlg.addEventListener("click", e => {
+    const go = e.target.closest("[data-go]"); if (go) show(go.dataset.go);
+    if (e.target.closest("[data-close]") || e.target === dlg) dlg.close();
+  });
 
-  words = ["dinner", "supper club", "game night", "salon", "run club", "knitting circle", "meetup"];
-
-  photos = (() => {
-    const files = ["e1.jpg", "e2.jpg", "e3.jpg", "e4.jpg", "e5.jpg"];
-    for (let i = files.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [files[i], files[j]] = [files[j], files[i]];
-    }
-    return files;
-  })();
-
-  componentDidMount() {
-    const imgs = document.querySelectorAll("img[data-kanpai-photo]");
-    imgs.forEach((img, i) => {
-      const next = this.photos[i];
-      if (next && !img.src.endsWith(next)) img.src = next;
+  dlg.querySelectorAll("form").forEach(form => form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const err = form.querySelector(".err"); const btn = form.querySelector("[type=submit]");
+    let bad = null;
+    form.querySelectorAll("input").forEach(i => { const ok = i.checkValidity(); i.setAttribute("aria-invalid", ok ? "false" : "true"); if (!ok && !bad) bad = i; });
+    if (bad) { err.textContent = bad.type === "email" ? "That email doesn't look right." : "Please fill in the highlighted field."; bad.focus(); return; }
+    const host = form.dataset.role === "host";
+    const data = Object.fromEntries(new FormData(form));
+    const payload = Object.assign(data, {
+      role: host ? "Host" : "Startup",
+      _subject: "Kanpai waitlist — " + (host ? "host" : "startup")
     });
-    this.timer = setInterval(() => {
-      this.setState(s => ({ wordIdx: (s.wordIdx + 1) % this.words.length }));
-    }, 2600);
-  }
+    if (host && !payload.past_events_profile) payload.past_events_profile = "(none given)";
+    if (!host && !payload.associated_org) payload.associated_org = "(individual)";
+    btn.disabled = true; btn.textContent = "Sending…"; err.textContent = "";
+    try {
+      const res = await fetch(FORM, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error(res.status);
+      form.reset(); show("done");
+    } catch (_) {
+      err.textContent = "Something went wrong. Try again, or email hi@kanpai.events.";
+    } finally { btn.disabled = false; btn.textContent = "Join the list"; }
+  }));
 
-  componentWillUnmount() { clearInterval(this.timer); }
-
-  get role() { return this.state.role || this.props.defaultRole || "host"; }
-
-  tab(active) {
-    return {
-      background: active ? "#14180F" : "transparent",
-      color: active ? "#F4F1EA" : "rgba(20,24,15,0.72)",
-      border: "none",
-      borderRadius: "4px",
-      padding: "11px 12px",
-      fontFamily: "'Zen Kaku Gothic New', sans-serif",
-      fontSize: "14px",
-      fontWeight: active ? 600 : 500,
-      cursor: "pointer",
-      transition: "background 120ms ease, color 120ms ease"
-    };
-  }
-
-  renderVals() {
-    const role = this.role;
-    const host = role === "host";
-    const w = this.words[this.state.wordIdx];
-    const irisWord = (text) => React.createElement("span", {
-        key: w,
-        style: {
-          display: "inline-block",
-          fontFamily: "'Shippori Mincho', serif",
-          fontWeight: 600,
-          paddingRight: "0.08em",
-          color: "#1E3A2B",
-          backgroundImage: "linear-gradient(100deg, #1E3A2B 0%, #2C5B4C 18%, #3F5A72 34%, #5B4A6B 50%, #3F5A72 66%, #2C5B4C 82%, #1E3A2B 100%)",
-          backgroundSize: "200% 100%",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          animation: "gl-word-in 420ms cubic-bezier(0.2,0.7,0.2,1) both, gl-iris 11s linear infinite"
-        }
-      }, text);
-    return {
-      rotatingWord: irisWord(w),
-      rotatingWordComma: irisWord(w + ","),
-      isHost: host,
-      isStartup: !host,
-      submitted: this.state.submitted,
-      notSubmitted: !this.state.submitted,
-      email: this.state.email,
-      city: this.state.city,
-      eventType: this.state.eventType,
-      offer: this.state.offer,
-      setOffer: (e) => this.setState({ offer: e.target.value }),
-      hostTabStyle: this.tab(host),
-      startupTabStyle: this.tab(!host),
-      confirmLine: host
-        ? "We'll email you the moment hosts can list their rooms, and nudge you if we spot a sponsor who fits."
-        : "We'll send you the first batch of SF rooms as soon as the beta opens.",
-      pickHost: () => this.setState({ role: "host" }),
-      pickStartup: () => this.setState({ role: "startup" }),
-      setEmail: (e) => this.setState({ email: e.target.value }),
-      setCity: (e) => this.setState({ city: e.target.value }),
-      setEventType: (e) => this.setState({ eventType: e.target.value }),
-      name: this.state.name,
-      setName: (e) => this.setState({ name: e.target.value }),
-      org: this.state.org,
-      setOrg: (e) => this.setState({ org: e.target.value }),
-      hostLink: this.state.hostLink,
-      setHostLink: (e) => this.setState({ hostLink: e.target.value }),
-      submitLabel: this.state.sending ? "Sending…" : "Join the list",
-      error: this.state.error,
-      submit: async () => {
-        if (this.state.sending) return;
-        if (!/.+@.+\..+/.test(this.state.email)) {
-          this.setState({ error: "That email doesn't look right." });
-          return;
-        }
-        this.setState({ sending: true, error: "" });
-        const cities = { sf: "San Francisco", nyc: "New York", la: "Los Angeles", other: "Somewhere else" };
-        const events = { salon: "Salon or supper club", party: "Party", runclub: "Run club", hacknight: "Hack night or demo night", conference: "Conference or summit", other: "Something else" };
-        const payload = {
-          name: this.state.name || "(not given)",
-          email: this.state.email,
-          role: host ? "Host" : "Startup",
-          city: cities[this.state.city] || this.state.city,
-          _subject: "Kanpai waitlist — " + (host ? "host" : "startup")
-        };
-        const offers = { cash: "Money", space: "Our space", product: "Product or credits", food: "Food & drink", unsure: "Not sure yet" };
-        if (host) {
-          payload.event_type = events[this.state.eventType];
-          payload.past_events_profile = this.state.hostLink || "(none given)";
-        }
-        else {
-          payload.offering = offers[this.state.offer];
-          payload.associated_org = this.state.org || "(individual)";
-        }
-        try {
-          const res = await fetch("https://formspree.io/f/xppzqvgv", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Accept: "application/json" },
-            body: JSON.stringify(payload)
-          });
-          if (!res.ok) throw new Error("bad status");
-          this.setState({ sending: false, submitted: true });
-        } catch (e) {
-          this.setState({ sending: false, error: "Something went wrong. Try again, or email hi@kanpai.events." });
-        }
-      }
-    };
-  }
-}
+  const menu = document.getElementById("menu");
+  const menuBtn = document.querySelector(".menu-btn");
+  menuBtn.addEventListener("click", () => { const o = menu.classList.toggle("open"); menuBtn.setAttribute("aria-expanded", String(o)); });
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { menu.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }));
+})();
 </script>
 </body>
 </html>
